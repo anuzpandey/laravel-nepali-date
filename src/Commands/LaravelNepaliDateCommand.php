@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Anuzpandey\LaravelNepaliDate\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelNepaliDateCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-nepali-date';
 
     public $description = 'My command';
 

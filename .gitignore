@@ -1,4 +1,6 @@
 .idea
+.vs_code
+.fleet
 .phpunit.cache
 build
 composer.lock
