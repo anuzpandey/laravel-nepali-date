@@ -2,8 +2,12 @@
 
 namespace Anuzpandey\LaravelNepaliDate\Traits;
 
-trait EnglishDateTrait {
+use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
+use Carbon\Carbon;
+use RuntimeException;
 
+trait EnglishDateTrait
+{
     private array $monthsInEnglish = [
         1 => 'January',
         2 => 'February',
@@ -17,6 +21,21 @@ trait EnglishDateTrait {
         10 => 'October',
         11 => 'November',
         12 => 'December',
+    ];
+
+    private array $englishMonthInNepali = [
+        1 => 'जनवरी',
+        2 => 'फेब्रुअरी',
+        3 => 'मार्च',
+        4 => 'अप्रिल',
+        5 => 'मे',
+        6 => 'जुन',
+        7 => 'जुलाई',
+        8 => 'अगस्ट',
+        9 => 'सेप्टेम्बर',
+        10 => 'अक्टोबर',
+        11 => 'नोभेम्बर',
+        12 => 'डिसेम्बर',
     ];
 
     private array $dayOfWeekInEnglish = [
@@ -41,5 +60,146 @@ trait EnglishDateTrait {
         8 => '8',
         9 => '9',
     ];
+
+
+    public function toEnglishDate(): string
+    {
+        $checkIfIsInRange = $this->isInNepaliDateRange($this->date);
+
+        if (!$checkIfIsInRange) {
+            throw new RuntimeException($checkIfIsInRange);
+        }
+
+        $totalNepaliDays = $this->calculateTotalNepaliDays();
+
+        $this->performCalculationBasedonNepaliDays($totalNepaliDays);
+
+        return $this->englishYear . '-' . $this->englishMonth . '-' . $this->englishDay;
+    }
+
+
+    public function toEnglishDateArray(): NepaliDateArrayData
+    {
+        $this->toEnglishDate();
+
+        return NepaliDateArrayData::from([
+            'year' => $this->englishYear,
+            'month' => $this->englishMonth,
+            'day' => $this->englishDay,
+            'npYear' => $this->convertEnToNpNumber($this->englishYear),
+            'npMonth' => $this->convertEnToNpNumber($this->englishMonth),
+            'npDay' => $this->convertEnToNpNumber($this->englishDay),
+            'dayName' => $this->dayOfWeekInEnglish[$this->dayOfWeek],
+            'monthName' => $this->monthsInEnglish[(int) $this->englishMonth],
+            'npDayName' => $this->formattedNepaliDateOfWeek($this->dayOfWeek),
+            'npMonthName' => $this->englishMonthInNepali[(int) $this->englishMonth],
+        ]);
+    }
+
+
+    public function isInNepaliDateRange(Carbon $date): string|bool
+    {
+        if ($date->year < 2000 || $date->year > 2089) {
+            return 'Date is out of range. Please provide date between 2000 to 2089';
+        }
+
+        if ($date->month < 1 || $date->month > 12) {
+            return 'Month is out of range. Please provide month between 1-12';
+        }
+
+        if ($date->day < 1 || $date->day > 32) {
+            return 'Day is out of range. Please provide day between 1-32';
+        }
+
+        return TRUE;
+    }
+
+
+    public function calculateTotalNepaliDays()
+    {
+        $totalNepaliDays = 0;
+        $k = 0;
+
+        for ($i = 0; $i < ($this->date->year - $this->nepaliYear); $i++) {
+            for ($j = 1; $j <= 12; $j++) {
+                $totalNepaliDays += $this->calendarData[$k][$j];
+            }
+            $k++;
+        }
+
+        // Count Total Days in terms of month
+        for ($j = 1; $j < $this->date->month; $j++) {
+            $totalNepaliDays += $this->calendarData[$k][$j];
+        }
+
+        // Count Total Days in Terms of days
+        $totalNepaliDays += $this->date->day;
+
+        return $totalNepaliDays;
+    }
+
+
+    public function performCalculationBasedOnNepaliDays(string|int $totalNepaliDays)
+    {
+        $_day = 4 - 1;
+
+        // Calculation of equivalent english date...
+        $_year = $this->englishYear;
+        $_month = $this->englishMonth;
+        $totalEnglishDays = $this->englishDay;
+
+        while ($totalNepaliDays != 0) {
+            $a = ($this->isLeapYear($_year))
+                ? $this->englishLeapMonths[$_month]
+                : $this->englishNormalMonths[$_month];
+
+            $totalEnglishDays++;
+            $_day++;
+
+            if ($totalEnglishDays > $a) {
+                $_month++;
+                $totalEnglishDays = 1;
+                if ($_month > 12) {
+                    $_year++;
+                    $_month = 1;
+                }
+            }
+
+            if ($_day > 7) {
+                $_day = 1;
+            }
+
+            $totalNepaliDays--;
+        }
+
+        $this->englishYear = $_year;
+        $this->englishMonth = $_month > 9 ? $_month : '0' . $_month;
+        $this->englishDay = $totalEnglishDays > 9 ? $totalEnglishDays : '0' . $totalEnglishDays;
+        $this->dayOfWeek = $_day;
+    }
+
+
+    public function toFormattedEnglishDate(
+        string $format = 'd F Y, l',
+        string $locale = 'en'
+    ): string
+    {
+        $englishDateArray = $this->toEnglishDateArray();
+
+        $formattedArray = ($locale === 'en')
+            ? $this->getEnglishLocaleFormattingCharacters($englishDateArray)
+            : $this->getNepaliLocaleFormattingCharacters($englishDateArray);
+
+        return match ($format) {
+            'd F Y, l' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}, {$formattedArray['l']}",
+            'l, d F Y' => "{$formattedArray['l']}, {$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
+            'd F Y' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
+            'd-m-Y' => "{$formattedArray['d']}-{$formattedArray['m']}-{$formattedArray['Y']}",
+            'Y-m-d' => "{$formattedArray['Y']}-{$formattedArray['m']}-{$formattedArray['d']}",
+            'd/m/Y' => "{$formattedArray['d']}/{$formattedArray['m']}/{$formattedArray['Y']}",
+            'Y/m/d' => "{$formattedArray['Y']}/{$formattedArray['m']}/{$formattedArray['d']}",
+            default => $this->invalidDateFormatException(),
+        };
+    }
 
 }
