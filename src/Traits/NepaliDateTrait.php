@@ -77,7 +77,7 @@ trait NepaliDateTrait
 
         $year = $this->nepaliYear;
         $month = $this->nepaliMonth < 10 ? '0' . $this->nepaliMonth : $this->nepaliMonth;
-        $day = $this->nepaliDay;
+        $day = $this->nepaliDay < 10 ? '0' . $this->nepaliDay : $this->nepaliDay;
 
         return $year . '-' . $month . '-' . $day;
     }
