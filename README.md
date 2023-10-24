@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/anuzpandey/laravel-nepali-date/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/anuzpandey/laravel-nepali-date/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/anuzpandey/laravel-nepali-date.svg?style=flat-square)](https://packagist.org/packages/anuzpandey/laravel-nepali-date)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+LaravelNepaliDate is a Laravel package that simplifies the conversion of dates between the Gregorian (English) and Nepali (Bikram Sambat) calendars. This package is a handy tool for projects that require handling dates in both English and Nepali formats, such as websites and applications targeting users in Nepal.
 
 ## Installation
 
@@ -13,26 +13,6 @@ You can install the package via composer:
 
 ```bash
 composer require anuzpandey/laravel-nepali-date
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-nepali-date-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-nepali-date-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
 ```
 
 Optionally, you can publish the views using
@@ -44,8 +24,24 @@ php artisan vendor:publish --tag="laravel-nepali-date-views"
 ## Usage
 
 ```php
-$laravelNepaliDate = new Anuzpandey\LaravelNepaliDate();
-echo $laravelNepaliDate->echoPhrase('Hello, Anuzpandey!');
+$engDate = '1996-04-22';
+LaravelNepaliDate::from($engDate)->toNepaliDate();
+// Result: 2053-01-10
+
+LaravelNepaliDate::from($engDate)->toFormattedNepaliDate();
+// Result: १० वैशाख २०५३, सोमबार
+
+
+$nepDate = '2053-01-10';
+LaravelNepaliDate::from($nepDate)->toEnglishDate();
+// Result: 1996-04-22
+
+LaravelNepaliDate::from($nepDate)->toFormattedEnglishDate();
+// Results: 22 April 1996, Monday
+
+// Other methods
+LaravelNepaliDate::from($engDate)->toNepaliDateArray()->toArray();
+LaravelNepaliDate::from($engDate)->toEnglishDateArray()->toArray();
 ```
 
 ## Testing
