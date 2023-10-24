@@ -4,7 +4,6 @@ namespace Anuzpandey\LaravelNepaliDate\DataTransferObject;
 
 class NepaliDateArrayData
 {
-
     public function __construct(
         public readonly string $year,
         public readonly string $month,
@@ -16,10 +15,8 @@ class NepaliDateArrayData
         public readonly string $monthName,
         public readonly string $npDayName,
         public readonly string $npMonthName,
-    )
-    {
+    ) {
     }
-
 
     public static function from(array $data): self
     {
@@ -37,7 +34,6 @@ class NepaliDateArrayData
         );
     }
 
-
     public function toArray(): array
     {
         return [
@@ -53,5 +49,4 @@ class NepaliDateArrayData
             'npMonthName' => $this->npMonthName,
         ];
     }
-
 }

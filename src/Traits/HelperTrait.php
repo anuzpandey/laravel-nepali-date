@@ -7,34 +7,33 @@ trait HelperTrait
     public function convertEnToNpNumber($number): array|string
     {
         $en_number = [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
         ];
 
         $np_number = [
-            "०",
-            "१",
-            "२",
-            "३",
-            "४",
-            "५",
-            "६",
-            "७",
-            "८",
-            "९",
+            '०',
+            '१',
+            '२',
+            '३',
+            '४',
+            '५',
+            '६',
+            '७',
+            '८',
+            '९',
         ];
 
         return str_replace($en_number, $np_number, $number);
     }
-
 
     public function convertEnToNpWord($word): array|string
     {
@@ -73,12 +72,11 @@ trait HelperTrait
             'घण्टा',
             'घण्टा',
             'मिनेट',
-            'मिनेट'
+            'मिनेट',
         ];
 
         return str_replace($en_word, $np_word, $word);
     }
-
 
     private function invalidDateFormatException(): void
     {

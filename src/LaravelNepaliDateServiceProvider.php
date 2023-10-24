@@ -2,9 +2,9 @@
 
 namespace Anuzpandey\LaravelNepaliDate;
 
+use Anuzpandey\LaravelNepaliDate\Commands\LaravelNepaliDateCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Anuzpandey\LaravelNepaliDate\Commands\LaravelNepaliDateCommand;
 
 class LaravelNepaliDateServiceProvider extends PackageServiceProvider
 {
@@ -12,9 +12,5 @@ class LaravelNepaliDateServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-nepali-date');
-            // ->hasConfigFile()
-            // ->hasViews()
-            // ->hasMigration('create_laravel-nepali-date_table')
-            // ->hasCommand(LaravelNepaliDateCommand::class);
     }
 }

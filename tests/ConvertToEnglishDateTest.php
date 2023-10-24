@@ -35,13 +35,13 @@ it('can convert to nepali formatted result', function (string $format, string $l
     expect(LaravelNepaliDate::from($date)->toFormattedEnglishDate(format: $format, locale: $locale))
         ->toBe($expectedResult);
 })->with([
-    ["d F Y, l", "np", "२२ अप्रिल १९९६, सोमबार"],
-    ["d F Y, l", "en", "22 April 1996, Monday"],
-    ["Y-m-d", "np", "१९९६-०४-२२"],
-    ["Y-m-d", "en", "1996-04-22"],
-    ["l, d F Y", "np", "सोमबार, २२ अप्रिल १९९६"],
-    ["l, d F Y", "en", "Monday, 22 April 1996"],
-    ["d F Y", "np", "२२ अप्रिल १९९६"],
-    ["d F Y", "en", "22 April 1996"],
-    ["Y/m/d", "np", "१९९६/०४/२२"]
+    ['d F Y, l', 'np', '२२ अप्रिल १९९६, सोमबार'],
+    ['d F Y, l', 'en', '22 April 1996, Monday'],
+    ['Y-m-d', 'np', '१९९६-०४-२२'],
+    ['Y-m-d', 'en', '1996-04-22'],
+    ['l, d F Y', 'np', 'सोमबार, २२ अप्रिल १९९६'],
+    ['l, d F Y', 'en', 'Monday, 22 April 1996'],
+    ['d F Y', 'np', '२२ अप्रिल १९९६'],
+    ['d F Y', 'en', '22 April 1996'],
+    ['Y/m/d', 'np', '१९९६/०४/२२'],
 ]);

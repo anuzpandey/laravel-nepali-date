@@ -2,9 +2,9 @@
 
 namespace Anuzpandey\LaravelNepaliDate\Tests;
 
+use Anuzpandey\LaravelNepaliDate\LaravelNepaliDateServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Anuzpandey\LaravelNepaliDate\LaravelNepaliDateServiceProvider;
 
 class TestCase extends Orchestra
 {

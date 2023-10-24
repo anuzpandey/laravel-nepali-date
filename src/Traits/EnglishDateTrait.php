@@ -61,12 +61,11 @@ trait EnglishDateTrait
         9 => '9',
     ];
 
-
     public function toEnglishDate(): string
     {
         $checkIfIsInRange = $this->isInNepaliDateRange($this->date);
 
-        if (!$checkIfIsInRange) {
+        if (! $checkIfIsInRange) {
             throw new RuntimeException($checkIfIsInRange);
         }
 
@@ -74,9 +73,8 @@ trait EnglishDateTrait
 
         $this->performCalculationBasedonNepaliDays($totalNepaliDays);
 
-        return $this->englishYear . '-' . $this->englishMonth . '-' . $this->englishDay;
+        return $this->englishYear.'-'.$this->englishMonth.'-'.$this->englishDay;
     }
-
 
     public function toEnglishDateArray(): NepaliDateArrayData
     {
@@ -96,7 +94,6 @@ trait EnglishDateTrait
         ]);
     }
 
-
     public function isInNepaliDateRange(Carbon $date): string|bool
     {
         if ($date->year < 2000 || $date->year > 2089) {
@@ -111,9 +108,8 @@ trait EnglishDateTrait
             return 'Day is out of range. Please provide day between 1-32';
         }
 
-        return TRUE;
+        return true;
     }
-
 
     public function calculateTotalNepaliDays()
     {
@@ -137,7 +133,6 @@ trait EnglishDateTrait
 
         return $totalNepaliDays;
     }
-
 
     public function performCalculationBasedOnNepaliDays(string|int $totalNepaliDays)
     {
@@ -173,17 +168,15 @@ trait EnglishDateTrait
         }
 
         $this->englishYear = $_year;
-        $this->englishMonth = $_month > 9 ? $_month : '0' . $_month;
-        $this->englishDay = $totalEnglishDays > 9 ? $totalEnglishDays : '0' . $totalEnglishDays;
+        $this->englishMonth = $_month > 9 ? $_month : '0'.$_month;
+        $this->englishDay = $totalEnglishDays > 9 ? $totalEnglishDays : '0'.$totalEnglishDays;
         $this->dayOfWeek = $_day;
     }
-
 
     public function toFormattedEnglishDate(
         string $format = 'd F Y, l',
         string $locale = 'en'
-    ): string
-    {
+    ): string {
         $englishDateArray = $this->toEnglishDateArray();
 
         $formattedArray = ($locale === 'en')
@@ -201,5 +194,4 @@ trait EnglishDateTrait
             default => $this->invalidDateFormatException(),
         };
     }
-
 }

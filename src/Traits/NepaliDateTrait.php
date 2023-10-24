@@ -62,12 +62,11 @@ trait NepaliDateTrait
         9 => '९',
     ];
 
-
     public function toNepaliDate(): string
     {
         $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
 
-        if (!$checkIfIsInRange) {
+        if (! $checkIfIsInRange) {
             throw new RuntimeException($checkIfIsInRange);
         }
 
@@ -76,18 +75,16 @@ trait NepaliDateTrait
         $this->performCalculationBasedOn($totalEnglishDays);
 
         $year = $this->nepaliYear;
-        $month = $this->nepaliMonth < 10 ? '0' . $this->nepaliMonth : $this->nepaliMonth;
-        $day = $this->nepaliDay < 10 ? '0' . $this->nepaliDay : $this->nepaliDay;
+        $month = $this->nepaliMonth < 10 ? '0'.$this->nepaliMonth : $this->nepaliMonth;
+        $day = $this->nepaliDay < 10 ? '0'.$this->nepaliDay : $this->nepaliDay;
 
-        return $year . '-' . $month . '-' . $day;
+        return $year.'-'.$month.'-'.$day;
     }
-
 
     public function toFormattedNepaliDate(
         string $format = 'd F Y, l',
         string $locale = 'np'
-    ): string
-    {
+    ): string {
         $nepaliDateArray = $this->toNepaliDateArray();
 
         $formattedArray = ($locale === 'np')
@@ -106,13 +103,12 @@ trait NepaliDateTrait
         };
     }
 
-
     public function toNepaliDateArray(): NepaliDateArrayData
     {
         $this->toNepaliDate();
 
-        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
-        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
+        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
+        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
 
         return NepaliDateArrayData::from([
             'year' => $this->nepaliYear,
@@ -127,7 +123,6 @@ trait NepaliDateTrait
             'npMonthName' => $this->monthsInNepali[$this->nepaliMonth],
         ]);
     }
-
 
     public function calculateTotalEnglishDays($year, $month, $day)
     {
@@ -157,7 +152,6 @@ trait NepaliDateTrait
 
         return $totalEnglishDays;
     }
-
 
     public function performCalculationBasedOn($totalEnglishDays): void
     {
@@ -194,12 +188,10 @@ trait NepaliDateTrait
         }
     }
 
-
     public function formattedNepaliDateOfWeek($dayOfWeek)
     {
         return $this->dayOfWeekInNepali[$dayOfWeek];
     }
-
 
     public function formattedNepaliNumber($value): string
     {
@@ -211,7 +203,6 @@ trait NepaliDateTrait
 
         return implode('', $numbers);
     }
-
 
     public function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
@@ -225,7 +216,6 @@ trait NepaliDateTrait
         ];
     }
 
-
     public function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
         return [
@@ -237,7 +227,6 @@ trait NepaliDateTrait
             'l' => $nepaliDateArray->dayName,
         ];
     }
-
 
     public function isInEnglishDateRange(Carbon $date): string|bool
     {
@@ -255,5 +244,4 @@ trait NepaliDateTrait
 
         return true;
     }
-
 }
