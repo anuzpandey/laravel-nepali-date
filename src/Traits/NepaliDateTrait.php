@@ -2,6 +2,11 @@
 
 namespace Anuzpandey\LaravelNepaliDate\Traits;
 
+use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use RuntimeException;
+
 trait NepaliDateTrait
 {
     private array $monthsInNepali = [
@@ -56,6 +61,72 @@ trait NepaliDateTrait
         8 => '८',
         9 => '९',
     ];
+
+
+    public function toNepaliDate(): string
+    {
+        $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
+
+        if (!$checkIfIsInRange) {
+            throw new RuntimeException($checkIfIsInRange);
+        }
+
+        $totalEnglishDays = $this->calculateTotalEnglishDays($this->date->year, $this->date->month, $this->date->day);
+
+        $this->performCalculationBasedOn($totalEnglishDays);
+
+        $year = $this->nepaliYear;
+        $month = $this->nepaliMonth < 10 ? '0' . $this->nepaliMonth : $this->nepaliMonth;
+        $day = $this->nepaliDay;
+
+        return $year . '-' . $month . '-' . $day;
+    }
+
+
+    public function toFormattedNepaliDate(
+        string $format = 'd F Y, l',
+        string $locale = 'np'
+    ): string
+    {
+        $nepaliDateArray = $this->toNepaliDateArray();
+
+        $formattedArray = ($locale === 'np')
+            ? $this->getNepaliLocaleFormattingCharacters($nepaliDateArray)
+            : $this->getEnglishLocaleFormattingCharacters($nepaliDateArray);
+
+        return match ($format) {
+            'd F Y, l' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}, {$formattedArray['l']}",
+            'l, d F Y' => "{$formattedArray['l']}, {$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
+            'd F Y' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
+            'd-m-Y' => "{$formattedArray['d']}-{$formattedArray['m']}-{$formattedArray['Y']}",
+            'Y-m-d' => "{$formattedArray['Y']}-{$formattedArray['m']}-{$formattedArray['d']}",
+            'd/m/Y' => "{$formattedArray['d']}/{$formattedArray['m']}/{$formattedArray['Y']}",
+            'Y/m/d' => "{$formattedArray['Y']}/{$formattedArray['m']}/{$formattedArray['d']}",
+            default => $this->invalidDateFormatException(),
+        };
+    }
+
+
+    public function toNepaliDateArray(): NepaliDateArrayData
+    {
+        $this->toNepaliDate();
+
+        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
+        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
+
+        return NepaliDateArrayData::from([
+            'year' => $this->nepaliYear,
+            'month' => $nepaliMonth,
+            'day' => $nepaliDay,
+            'npYear' => $this->formattedNepaliNumber($this->nepaliYear),
+            'npMonth' => $this->formattedNepaliNumber($nepaliMonth),
+            'npDay' => $this->formattedNepaliNumber($nepaliDay),
+            'dayName' => $this->dayOfWeekInEnglish[$this->dayOfWeek],
+            'monthName' => $this->nepaliMonthInEnglish[$this->nepaliMonth],
+            'npDayName' => $this->formattedNepaliDateOfWeek($this->dayOfWeek),
+            'npMonthName' => $this->monthsInNepali[$this->nepaliMonth],
+        ]);
+    }
 
 
     public function calculateTotalEnglishDays($year, $month, $day)
@@ -121,6 +192,68 @@ trait NepaliDateTrait
 
             $totalEnglishDays--;
         }
+    }
+
+
+    public function formattedNepaliDateOfWeek($dayOfWeek)
+    {
+        return $this->dayOfWeekInNepali[$dayOfWeek];
+    }
+
+
+    public function formattedNepaliNumber($value): string
+    {
+        $numbers = str_split($value);
+
+        foreach ($numbers as $key => $number) {
+            $numbers[$key] = $this->numbersInNepali[$number];
+        }
+
+        return implode('', $numbers);
+    }
+
+
+    public function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
+    {
+        return [
+            'Y' => $nepaliDateArray->npYear,
+            'y' => Str::substr($nepaliDateArray->npYear, 2, 2),
+            'F' => $nepaliDateArray->npMonthName,
+            'm' => $nepaliDateArray->npMonth,
+            'd' => $nepaliDateArray->npDay,
+            'l' => $nepaliDateArray->npDayName,
+        ];
+    }
+
+
+    public function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
+    {
+        return [
+            'Y' => $nepaliDateArray->year,
+            'y' => Str::substr($nepaliDateArray->year, 2, 2),
+            'F' => $nepaliDateArray->monthName,
+            'm' => $nepaliDateArray->month,
+            'd' => $nepaliDateArray->day,
+            'l' => $nepaliDateArray->dayName,
+        ];
+    }
+
+
+    public function isInEnglishDateRange(Carbon $date): string|bool
+    {
+        if ($date->year < 1944 || $date->year > 2033) {
+            return 'Date is out of range. Please provide date between 1944-01-01 to 2033-12-31';
+        }
+
+        if ($date->month < 1 || $date->month > 12) {
+            return 'Month is out of range. Please provide month between 1-12';
+        }
+
+        if ($date->day < 1 || $date->day > 31) {
+            return 'Day is out of range. Please provide day between 1-31';
+        }
+
+        return true;
     }
 
 }
