@@ -295,13 +295,13 @@ trait NepaliDateTrait
     {
         if ($locale === 'en') {
             return match ($npDayName) {
-                'आइतबार' => 'आइत',
-                'सोमबार' => 'सोम',
-                'मङ्गलबार' => 'मङ्गल',
-                'बुधबार' => 'बुध',
-                'बिहिबार' => 'बिहि',
-                'शुक्रबार' => 'शुक्र',
-                'शनिबार' => 'शनि',
+                'Sunday' => 'Sun',
+                'Monday' => 'Mon',
+                'Tuesday' => 'Tue',
+                'Wednesday' => 'Wed',
+                'Thursday' => 'Thu',
+                'Friday' => 'Fri',
+                'Saturday' => 'Sat',
             };
         }
 
