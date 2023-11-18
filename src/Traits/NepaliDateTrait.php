@@ -63,7 +63,7 @@ trait NepaliDateTrait
     ];
 
 
-    public function toNepaliDate(?string $format = NULL, ?string $locale = 'np'): string
+    public function toNepaliDate(string $format = 'Y-m-d', string $locale = 'np'): string
     {
         if ($format) {
             return $this->toFormattedNepaliDate($format, $locale);

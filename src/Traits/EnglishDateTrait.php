@@ -62,7 +62,7 @@ trait EnglishDateTrait
     ];
 
 
-    public function toEnglishDate(?string $format = NULL, ?string $locale = 'en'): string
+    public function toEnglishDate(string $format = 'Y-m-d', string $locale = 'en'): string
     {
         if ($format) {
             return $this->toFormattedEnglishDate($format, $locale);

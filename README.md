@@ -65,6 +65,47 @@ The following format specifiers are supported for formatting dates:
 - `l` - Day in full name (Sunday-Saturday/आइतबार-शनिबार)
 - `S` - Day in two letters (st, nd, rd, th)
 
+## Extending Carbon with NepaliDateMixin
+In order to use the `toNepaliDate` and `toEnglishDate` mixin on Carbon instances, you need to register the `NepaliDateMixin` mixin in your Laravel service provider.
+
+You can do so by adding the following code to your `AppServiceProvider`
+```php
+<?php
+
+use Anuzpandey\LaravelNepaliDate\NepaliDateMixin;
+use Carbon\Carbon;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        // Register the NepaliDateMixin
+        Carbon::mixin(new NepaliDateMixin());
+    }
+}
+```
+
+Or create your own service provider with `php artisan make:provider MacroableServiceProvider`,
+register it in `config/app.php` and add the following code to the `boot` method.
+```php
+<?php
+
+use Anuzpandey\LaravelNepaliDate\NepaliDateMixin;
+use Carbon\Carbon;
+use Illuminate\Support\ServiceProvider;
+
+class MacroableServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        // Register the NepaliDateMixin
+        Carbon::mixin(new NepaliDateMixin());
+    }
+}
+```
+
+
 ## Testing
 
 ```bash
