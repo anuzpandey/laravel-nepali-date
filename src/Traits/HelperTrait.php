@@ -94,9 +94,11 @@ trait HelperTrait
                 if ($locale === 'np') {
                     $formattedString .= $formatData[$char];
                 } else {
-                    $formattedString .= $char === 'S'
-                        ? $this->getOrdinalSuffix((int) $formatData['j'])
-                        : $formatData[$char];
+                    if ($char === 'S') {
+                        $formattedString .= $this->getOrdinalSuffix((int) $formatData['j']);
+                    } else {
+                        $formattedString .= $formatData[$char];
+                    }
                 }
             } else {
                 $formattedString .= $char;
@@ -169,6 +171,7 @@ trait HelperTrait
             'j' => $formattedArray['j'],
             'l' => $formattedArray['l'],
             'D' => $formattedArray['D'],
+            'S' => $formattedArray['j'],
         ];
 
         return $this->getFormattedString($format, $formatData, $locale);
