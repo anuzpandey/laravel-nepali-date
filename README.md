@@ -27,6 +27,12 @@ $engDate = '1996-04-22';
 LaravelNepaliDate::from($engDate)->toNepaliDate();
 // Result: 2053-01-10
 
+LaravelNepaliDate::from($engDate)->toNepaliDate(format: 'D, j F Y');
+// Result: सोम, १० वैशाख २०५३
+
+LaravelNepaliDate::from($engDate)->toNepaliDate(format: 'D, j F Y', locale: 'en');
+// Result: Mon, 10 Baisakh 2053
+
 LaravelNepaliDate::from($engDate)->toFormattedNepaliDate();
 // Result: १० वैशाख २०५३, सोमबार
 
