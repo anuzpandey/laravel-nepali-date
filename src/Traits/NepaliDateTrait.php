@@ -95,6 +95,18 @@ trait NepaliDateTrait
             ? $this->getNepaliLocaleFormattingCharacters($nepaliDateArray)
             : $this->getEnglishLocaleFormattingCharacters($nepaliDateArray);
 
+        $formatData = [
+            'Y' => $formattedArray['Y'],
+            'y' => $formattedArray['y'],
+            'F' => $formattedArray['F'],
+            'm' => $formattedArray['m'],
+            'n' => $formattedArray['n'],
+            'd' => $formattedArray['d'],
+            'j' => $formattedArray['j'],
+            'l' => $formattedArray['l'],
+            'D' => $this->getShortDayName($formattedArray['l']),
+        ];
+
         return match ($format) {
             'd F Y, l' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}, {$formattedArray['l']}",
             'l, d F Y' => "{$formattedArray['l']}, {$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
@@ -103,7 +115,17 @@ trait NepaliDateTrait
             'Y-m-d' => "{$formattedArray['Y']}-{$formattedArray['m']}-{$formattedArray['d']}",
             'd/m/Y' => "{$formattedArray['d']}/{$formattedArray['m']}/{$formattedArray['Y']}",
             'Y/m/d' => "{$formattedArray['Y']}/{$formattedArray['m']}/{$formattedArray['d']}",
-            default => $this->invalidDateFormatException(),
+            'Ymd'  => "{$formattedArray['Y']}{$formattedArray['m']}{$formattedArray['d']}",
+            'Y' => $formattedArray['Y'],
+            'y' => $formattedArray['y'],
+            'F' => $formattedArray['F'],
+            'm' => $formattedArray['m'],
+            'n' => $formattedArray['n'],
+            'd' => $formattedArray['d'],
+            'j' => $formattedArray['j'],
+            'l' => $formattedArray['l'],
+            'D' => $formattedArray['D'],
+            default => $this->formatDateString($format, $formatData),
         };
     }
 
@@ -215,8 +237,11 @@ trait NepaliDateTrait
             'y' => Str::substr($nepaliDateArray->npYear, 2, 2),
             'F' => $nepaliDateArray->npMonthName,
             'm' => $nepaliDateArray->npMonth,
+            'n' => $nepaliDateArray->npMonth > 9 ? $nepaliDateArray->npMonth : Str::substr($nepaliDateArray->npMonth, 1, 1),
             'd' => $nepaliDateArray->npDay,
+            'j' => $nepaliDateArray->npDay > 9 ? $nepaliDateArray->npDay : Str::substr($nepaliDateArray->npDay, 1, 1),
             'l' => $nepaliDateArray->npDayName,
+            'D' => $this->getShortDayName($nepaliDateArray->npDayName),
         ];
     }
 
@@ -248,4 +273,26 @@ trait NepaliDateTrait
 
         return true;
     }
+
+    private function formatDateString(string $format, $datePartials): string
+    {
+        $formattedString = '';
+
+        // Loop through each format character
+        for ($i = 0, $iMax = strlen($format); $i < $iMax; $i++) {
+            $char = $format[$i];
+
+            // Check if the character is a valid format character
+            if (array_key_exists($char, $datePartials)) {
+                // Append the formatted value to the result string
+                $formattedString .= $datePartials[$char];
+            } else {
+                // If it's not a valid format character, append it as is
+                $formattedString .= $char;
+            }
+        }
+
+        return $formattedString;
+    }
+
 }
