@@ -62,12 +62,8 @@ trait EnglishDateTrait
     ];
 
 
-    public function toEnglishDate(?string $format = NULL, ?string $locale = 'en'): string
+    public function toEnglishDate(string $format = 'Y-m-d', string $locale = 'en'): string
     {
-        if ($format) {
-            return $this->toFormattedEnglishDate($format, $locale);
-        }
-
         $checkIfIsInRange = $this->isInNepaliDateRange($this->date);
 
         if (!$checkIfIsInRange) {
@@ -78,14 +74,12 @@ trait EnglishDateTrait
 
         $this->performCalculationBasedonNepaliDays($totalNepaliDays);
 
-        return $this->englishYear . '-' . $this->englishMonth . '-' . $this->englishDay;
+        return $this->toFormattedEnglishDate($format, $locale);
     }
 
 
     public function toEnglishDateArray(): NepaliDateArrayData
     {
-        $this->toEnglishDate();
-
         return NepaliDateArrayData::from([
             'year' => $this->englishYear,
             'month' => $this->englishMonth,

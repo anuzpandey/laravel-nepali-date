@@ -13,26 +13,11 @@ it('can convert to basic nepali date', function (string $date, string $expectedR
     ['2022-12-20', '1966-04-02'],
 ]);
 
-it('can convert to english date array', function () {
-    $date = '2053-01-10';
-
-    $englishDateArray = LaravelNepaliDate::from($date)->toEnglishDateArray();
-
-    expect($englishDateArray->toArray())
-        ->toBeArray()
-        ->toMatchArray([
-            'year' => '1996',
-            'month' => '04',
-            'day' => '22',
-            'npYear' => '१९९६',
-            'npDayName' => 'सोमबार',
-        ]);
-});
 
 it('can convert to nepali formatted result', function (string $format, string $locale, string $expectedResult) {
     $date = '2053-01-10';
 
-    expect(LaravelNepaliDate::from($date)->toFormattedEnglishDate(format: $format, locale: $locale))
+    expect(LaravelNepaliDate::from($date)->toEnglishDate(format: $format, locale: $locale))
         ->toBe($expectedResult);
 })->with([
     ['d F Y, l', 'np', '२२ अप्रिल १९९६, सोमबार'],
