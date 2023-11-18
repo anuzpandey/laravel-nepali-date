@@ -92,6 +92,7 @@ trait HelperTrait
 
             if (array_key_exists($char, $formatData)) {
                 if ($locale === 'np') {
+                    if ($char === 'S') continue;
                     $formattedString .= $formatData[$char];
                 } else {
                     if ($char === 'S') {
