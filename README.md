@@ -102,6 +102,16 @@ class MacroableServiceProvider extends ServiceProvider
 }
 ```
 
+### Usage with Mixin
+```php
+$engDate = '1996-04-22';
+Carbon::parse($engDate)->toNepaliDate();
+// Result: 2053-01-10
+
+Carbon::parse($engDate)->toNepaliDate(format: 'D, j F Y');
+// Result: सोम, १० वैशाख २०५३
+```
+
 
 ## Testing
 
