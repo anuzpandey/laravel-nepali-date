@@ -62,15 +62,16 @@ trait NepaliDateTrait
         9 => '९',
     ];
 
-    public function toNepaliDate(?string $format = NULL): string
+
+    public function toNepaliDate(?string $format = NULL, ?string $locale = 'np'): string
     {
         if ($format) {
-            return $this->toFormattedNepaliDate($format);
+            return $this->toFormattedNepaliDate($format, $locale);
         }
 
         $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
 
-        if (! $checkIfIsInRange) {
+        if (!$checkIfIsInRange) {
             throw new RuntimeException($checkIfIsInRange);
         }
 
@@ -79,19 +80,21 @@ trait NepaliDateTrait
         $this->performCalculationBasedOn($totalEnglishDays);
 
         $year = $this->nepaliYear;
-        $month = $this->nepaliMonth < 10 ? '0'.$this->nepaliMonth : $this->nepaliMonth;
-        $day = $this->nepaliDay < 10 ? '0'.$this->nepaliDay : $this->nepaliDay;
+        $month = $this->nepaliMonth < 10 ? '0' . $this->nepaliMonth : $this->nepaliMonth;
+        $day = $this->nepaliDay < 10 ? '0' . $this->nepaliDay : $this->nepaliDay;
 
-        return $year.'-'.$month.'-'.$day;
+        return $year . '-' . $month . '-' . $day;
     }
+
 
     public function toFormattedNepaliDate(
         string $format = 'Y-m-d',
         string $locale = 'np'
-    ): string {
+    ): string
+    {
         $nepaliDateArray = $this->toNepaliDateArray();
 
-        $formattedArray = ($locale === 'np')
+        $formattedArray = (Str::lower($locale) === 'np')
             ? $this->getNepaliLocaleFormattingCharacters($nepaliDateArray)
             : $this->getEnglishLocaleFormattingCharacters($nepaliDateArray);
 
@@ -104,37 +107,19 @@ trait NepaliDateTrait
             'd' => $formattedArray['d'],
             'j' => $formattedArray['j'],
             'l' => $formattedArray['l'],
-            'D' => $this->getShortDayName($formattedArray['l']),
+            'D' => $formattedArray['D'],
         ];
 
-        return match ($format) {
-            'd F Y, l' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}, {$formattedArray['l']}",
-            'l, d F Y' => "{$formattedArray['l']}, {$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
-            'd F Y' => "{$formattedArray['d']} {$formattedArray['F']} {$formattedArray['Y']}",
-            'd-m-Y' => "{$formattedArray['d']}-{$formattedArray['m']}-{$formattedArray['Y']}",
-            'Y-m-d' => "{$formattedArray['Y']}-{$formattedArray['m']}-{$formattedArray['d']}",
-            'd/m/Y' => "{$formattedArray['d']}/{$formattedArray['m']}/{$formattedArray['Y']}",
-            'Y/m/d' => "{$formattedArray['Y']}/{$formattedArray['m']}/{$formattedArray['d']}",
-            'Ymd'  => "{$formattedArray['Y']}{$formattedArray['m']}{$formattedArray['d']}",
-            'Y' => $formattedArray['Y'],
-            'y' => $formattedArray['y'],
-            'F' => $formattedArray['F'],
-            'm' => $formattedArray['m'],
-            'n' => $formattedArray['n'],
-            'd' => $formattedArray['d'],
-            'j' => $formattedArray['j'],
-            'l' => $formattedArray['l'],
-            'D' => $formattedArray['D'],
-            default => $this->formatDateString($format, $formatData),
-        };
+        return $this->formatDateString($format, $formatData);
     }
+
 
     public function toNepaliDateArray(): NepaliDateArrayData
     {
         $this->toNepaliDate();
 
-        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
-        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
+        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
+        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
 
         return NepaliDateArrayData::from([
             'year' => $this->nepaliYear,
@@ -149,6 +134,7 @@ trait NepaliDateTrait
             'npMonthName' => $this->monthsInNepali[$this->nepaliMonth],
         ]);
     }
+
 
     private function calculateTotalEnglishDays($year, $month, $day)
     {
@@ -178,6 +164,7 @@ trait NepaliDateTrait
 
         return $totalEnglishDays;
     }
+
 
     private function performCalculationBasedOn($totalEnglishDays): void
     {
@@ -214,10 +201,12 @@ trait NepaliDateTrait
         }
     }
 
+
     private function formattedNepaliDateOfWeek($dayOfWeek)
     {
         return $this->dayOfWeekInNepali[$dayOfWeek];
     }
+
 
     private function formattedNepaliNumber($value): string
     {
@@ -229,6 +218,7 @@ trait NepaliDateTrait
 
         return implode('', $numbers);
     }
+
 
     private function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
@@ -245,6 +235,7 @@ trait NepaliDateTrait
         ];
     }
 
+
     private function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
         return [
@@ -256,6 +247,7 @@ trait NepaliDateTrait
             'l' => $nepaliDateArray->dayName,
         ];
     }
+
 
     private function isInEnglishDateRange(Carbon $date): string|bool
     {
@@ -273,6 +265,7 @@ trait NepaliDateTrait
 
         return true;
     }
+
 
     private function formatDateString(string $format, $datePartials): string
     {
