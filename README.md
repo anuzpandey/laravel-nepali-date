@@ -30,6 +30,7 @@ LaravelNepaliDate::from($engDate)->toNepaliDate();
 LaravelNepaliDate::from($engDate)->toNepaliDate(format: 'D, j F Y');
 // Result: सोम, १० वैशाख २०५३
 
+// Format Specifiers are supported and listed below
 LaravelNepaliDate::from($engDate)->toNepaliDate(format: 'D, j F Y', locale: 'en');
 // Result: Mon, 10 Baisakh 2053
 
@@ -48,6 +49,21 @@ LaravelNepaliDate::from($nepDate)->toFormattedEnglishDate();
 LaravelNepaliDate::from($engDate)->toNepaliDateArray()->toArray();
 LaravelNepaliDate::from($engDate)->toEnglishDateArray()->toArray();
 ```
+
+## Format Specifiers
+
+The following format specifiers are supported for formatting dates:
+- `Y` - Year in four digits
+- `y` - Year in two digits
+- `m` - Month in two digits with leading zero (01-12/०१-१२)
+- `n` - Month in one or two digits without leading zero (1-12/१-१२)
+- `M` - Month in three letters (Jan-Dec)
+- `F` - Month in full name (January-December/बैशाख-चैत्र)
+- `d` - Day in two digits with leading zero (01-31/०१-३२)
+- `j` - Day in one or two digits without leading zero (1-31/१-३२)
+- `D` - Day in three letters (Sun-Sat/आइत-शनि)
+- `l` - Day in full name (Sunday-Saturday/आइतबार-शनिबार)
+- `S` - Day in two letters (st, nd, rd, th)
 
 ## Testing
 
