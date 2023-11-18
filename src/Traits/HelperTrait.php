@@ -83,6 +83,44 @@ trait HelperTrait
     }
 
 
+    public function getFormattedString(string $format, array $formatData, string $locale): string
+    {
+        $formattedString = '';
+
+        for ($i = 0, $iMax = strlen($format); $i < $iMax; $i++) {
+            $char = $format[$i];
+
+            if (array_key_exists($char, $formatData)) {
+                if ($locale === 'np') {
+                    $formattedString .= $formatData[$char];
+                } else {
+                    $formattedString .= $char === 'S'
+                        ? $this->getOrdinalSuffix((int) $formatData['j'])
+                        : $formatData[$char];
+                }
+            } else {
+                $formattedString .= $char;
+            }
+        }
+        return $formattedString;
+    }
+
+
+    public function getOrdinalSuffix(int $number): string
+    {
+        if ($number % 100 >= 11 && $number % 100 <= 13) {
+            return $number . 'th';
+        }
+
+        return match ($number % 10) {
+            1 => $number . 'st',
+            2 => $number . 'nd',
+            3 => $number . 'rd',
+            default => $number . 'th',
+        };
+    }
+
+
     private function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
         return [
@@ -133,22 +171,6 @@ trait HelperTrait
             'D' => $formattedArray['D'],
         ];
 
-        $formattedString = '';
-
-        // Loop through each format character
-        for ($i = 0, $iMax = strlen($format); $i < $iMax; $i++) {
-            $char = $format[$i];
-
-            // Check if the character is a valid format character
-            if (array_key_exists($char, $formatData)) {
-                // Append the formatted value to the result string
-                $formattedString .= $formatData[$char];
-            } else {
-                // If it's not a valid format character, append it as is
-                $formattedString .= $char;
-            }
-        }
-
-        return $formattedString;
+        return $this->getFormattedString($format, $formatData, $locale);
     }
 }
