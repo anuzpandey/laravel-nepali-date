@@ -34,20 +34,17 @@ LaravelNepaliDate::from($engDate)->toNepaliDate(format: 'D, j F Y');
 LaravelNepaliDate::from($engDate)->toNepaliDate(format: 'D, j F Y', locale: 'en');
 // Result: Mon, 10 Baisakh 2053
 
-LaravelNepaliDate::from($engDate)->toFormattedNepaliDate();
-// Result: १० वैशाख २०५३, सोमबार
-
 
 $nepDate = '2053-01-10';
 LaravelNepaliDate::from($nepDate)->toEnglishDate();
 // Result: 1996-04-22
 
-LaravelNepaliDate::from($nepDate)->toFormattedEnglishDate();
-// Results: 22 April 1996, Monday
+LaravelNepaliDate::from($nepDate)->toEnglishDate(format: 'l, jS F Y');
+// Result: Sunday, 22nd April 1996
 
-// Other methods
-LaravelNepaliDate::from($engDate)->toNepaliDateArray()->toArray();
-LaravelNepaliDate::from($engDate)->toEnglishDateArray()->toArray();
+// Format Specifiers are supported and listed below
+LaravelNepaliDate::from($nepDate)->toEnglishDate(format: 'l, j F Y', locale: 'np');
+// Result: आइतबार, २२ बैशाख १९९६
 ```
 
 ## Format Specifiers
