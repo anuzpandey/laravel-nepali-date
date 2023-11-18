@@ -243,8 +243,11 @@ trait NepaliDateTrait
             'y' => Str::substr($nepaliDateArray->year, 2, 2),
             'F' => $nepaliDateArray->monthName,
             'm' => $nepaliDateArray->month,
+            'n' => $nepaliDateArray->month > 9 ? $nepaliDateArray->month : Str::substr($nepaliDateArray->month, 1, 1),
             'd' => $nepaliDateArray->day,
+            'j' => $nepaliDateArray->day > 9 ? $nepaliDateArray->day : Str::substr($nepaliDateArray->day, 1, 1),
             'l' => $nepaliDateArray->dayName,
+            'D' => $this->getShortDayName($nepaliDateArray->dayName, 'en'),
         ];
     }
 
@@ -286,6 +289,31 @@ trait NepaliDateTrait
         }
 
         return $formattedString;
+    }
+
+    public function getShortDayName(string $npDayName, string $locale = 'np'): string
+    {
+        if ($locale === 'en') {
+            return match ($npDayName) {
+                'आइतबार' => 'आइत',
+                'सोमबार' => 'सोम',
+                'मङ्गलबार' => 'मङ्गल',
+                'बुधबार' => 'बुध',
+                'बिहिबार' => 'बिहि',
+                'शुक्रबार' => 'शुक्र',
+                'शनिबार' => 'शनि',
+            };
+        }
+
+        return match ($npDayName) {
+            'आइतबार' => 'आइत',
+            'सोमबार' => 'सोम',
+            'मङ्गलबार' => 'मङ्गल',
+            'बुधबार' => 'बुध',
+            'बिहिबार' => 'बिहि',
+            'शुक्रबार' => 'शुक्र',
+            'शनिबार' => 'शनि',
+        };
     }
 
 }

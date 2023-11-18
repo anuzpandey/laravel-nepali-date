@@ -34,18 +34,4 @@ class LaravelNepaliDate
 
         return new static($parsedDate);
     }
-
-
-    public function getShortDayName(string $npDayName): string
-    {
-        return match ($npDayName) {
-            'आइतबार' => 'आइत',
-            'सोमबार' => 'सोम',
-            'मङ्गलबार' => 'मङ्गल',
-            'बुधबार' => 'बुध',
-            'बिहिबार' => 'बिहि',
-            'शुक्रबार' => 'शुक्र',
-            'शनिबार' => 'शनि',
-        };
-    }
 }
