@@ -94,23 +94,7 @@ trait NepaliDateTrait
     {
         $nepaliDateArray = $this->toNepaliDateArray();
 
-        $formattedArray = (Str::lower($locale) === 'np')
-            ? $this->getNepaliLocaleFormattingCharacters($nepaliDateArray)
-            : $this->getEnglishLocaleFormattingCharacters($nepaliDateArray);
-
-        $formatData = [
-            'Y' => $formattedArray['Y'],
-            'y' => $formattedArray['y'],
-            'F' => $formattedArray['F'],
-            'm' => $formattedArray['m'],
-            'n' => $formattedArray['n'],
-            'd' => $formattedArray['d'],
-            'j' => $formattedArray['j'],
-            'l' => $formattedArray['l'],
-            'D' => $formattedArray['D'],
-        ];
-
-        return $this->formatDateString($format, $formatData);
+        return $this->formatDateString($format, $locale, $nepaliDateArray);
     }
 
 
@@ -133,6 +117,32 @@ trait NepaliDateTrait
             'npDayName' => $this->formattedNepaliDateOfWeek($this->dayOfWeek),
             'npMonthName' => $this->monthsInNepali[$this->nepaliMonth],
         ]);
+    }
+
+
+    public function getShortDayName(string $npDayName, string $locale = 'np'): string
+    {
+        if ($locale === 'en') {
+            return match ($npDayName) {
+                'Sunday' => 'Sun',
+                'Monday' => 'Mon',
+                'Tuesday' => 'Tue',
+                'Wednesday' => 'Wed',
+                'Thursday' => 'Thu',
+                'Friday' => 'Fri',
+                'Saturday' => 'Sat',
+            };
+        }
+
+        return match ($npDayName) {
+            'आइतबार' => 'आइत',
+            'सोमबार' => 'सोम',
+            'मङ्गलबार' => 'मङ्गल',
+            'बुधबार' => 'बुध',
+            'बिहिबार' => 'बिहि',
+            'शुक्रबार' => 'शुक्र',
+            'शनिबार' => 'शनि',
+        };
     }
 
 
@@ -220,38 +230,6 @@ trait NepaliDateTrait
     }
 
 
-    private function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
-    {
-        return [
-            'Y' => $nepaliDateArray->npYear,
-            'y' => Str::substr($nepaliDateArray->npYear, 2, 2),
-            'F' => $nepaliDateArray->npMonthName,
-            'm' => $nepaliDateArray->npMonth,
-            'n' => $nepaliDateArray->npMonth > 9 ? $nepaliDateArray->npMonth : Str::substr($nepaliDateArray->npMonth, 1, 1),
-            'd' => $nepaliDateArray->npDay,
-            'j' => $nepaliDateArray->npDay > 9 ? $nepaliDateArray->npDay : Str::substr($nepaliDateArray->npDay, 1, 1),
-            'l' => $nepaliDateArray->npDayName,
-            'D' => $this->getShortDayName($nepaliDateArray->npDayName),
-        ];
-    }
-
-
-    private function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
-    {
-        return [
-            'Y' => $nepaliDateArray->year,
-            'y' => Str::substr($nepaliDateArray->year, 2, 2),
-            'F' => $nepaliDateArray->monthName,
-            'm' => $nepaliDateArray->month,
-            'n' => $nepaliDateArray->month > 9 ? $nepaliDateArray->month : Str::substr($nepaliDateArray->month, 1, 1),
-            'd' => $nepaliDateArray->day,
-            'j' => $nepaliDateArray->day > 9 ? $nepaliDateArray->day : Str::substr($nepaliDateArray->day, 1, 1),
-            'l' => $nepaliDateArray->dayName,
-            'D' => $this->getShortDayName($nepaliDateArray->dayName, 'en'),
-        ];
-    }
-
-
     private function isInEnglishDateRange(Carbon $date): string|bool
     {
         if ($date->year < 1944 || $date->year > 2033) {
@@ -267,53 +245,6 @@ trait NepaliDateTrait
         }
 
         return true;
-    }
-
-
-    private function formatDateString(string $format, $datePartials): string
-    {
-        $formattedString = '';
-
-        // Loop through each format character
-        for ($i = 0, $iMax = strlen($format); $i < $iMax; $i++) {
-            $char = $format[$i];
-
-            // Check if the character is a valid format character
-            if (array_key_exists($char, $datePartials)) {
-                // Append the formatted value to the result string
-                $formattedString .= $datePartials[$char];
-            } else {
-                // If it's not a valid format character, append it as is
-                $formattedString .= $char;
-            }
-        }
-
-        return $formattedString;
-    }
-
-    public function getShortDayName(string $npDayName, string $locale = 'np'): string
-    {
-        if ($locale === 'en') {
-            return match ($npDayName) {
-                'Sunday' => 'Sun',
-                'Monday' => 'Mon',
-                'Tuesday' => 'Tue',
-                'Wednesday' => 'Wed',
-                'Thursday' => 'Thu',
-                'Friday' => 'Fri',
-                'Saturday' => 'Sat',
-            };
-        }
-
-        return match ($npDayName) {
-            'आइतबार' => 'आइत',
-            'सोमबार' => 'सोम',
-            'मङ्गलबार' => 'मङ्गल',
-            'बुधबार' => 'बुध',
-            'बिहिबार' => 'बिहि',
-            'शुक्रबार' => 'शुक्र',
-            'शनिबार' => 'शनि',
-        };
     }
 
 }
