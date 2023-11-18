@@ -4,7 +4,6 @@ namespace Anuzpandey\LaravelNepaliDate\Traits;
 
 use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use RuntimeException;
 
 trait NepaliDateTrait
@@ -63,27 +62,11 @@ trait NepaliDateTrait
     ];
 
 
-    public function toNepaliDate(string $format = 'Y-m-d', string $locale = 'np'): string
+    public function toNepaliDate(string $format = 'Y-m-d', string $locale = 'en'): string
     {
-        if ($format) {
-            return $this->toFormattedNepaliDate($format, $locale);
-        }
+        $this->performCalculationOnEnglishDate();
 
-        $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
-
-        if (!$checkIfIsInRange) {
-            throw new RuntimeException($checkIfIsInRange);
-        }
-
-        $totalEnglishDays = $this->calculateTotalEnglishDays($this->date->year, $this->date->month, $this->date->day);
-
-        $this->performCalculationBasedOn($totalEnglishDays);
-
-        $year = $this->nepaliYear;
-        $month = $this->nepaliMonth < 10 ? '0' . $this->nepaliMonth : $this->nepaliMonth;
-        $day = $this->nepaliDay < 10 ? '0' . $this->nepaliDay : $this->nepaliDay;
-
-        return $year . '-' . $month . '-' . $day;
+        return $this->toFormattedNepaliDate($format, $locale);
     }
 
 
@@ -100,8 +83,6 @@ trait NepaliDateTrait
 
     public function toNepaliDateArray(): NepaliDateArrayData
     {
-        $this->toNepaliDate();
-
         $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
         $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
 
@@ -143,6 +124,20 @@ trait NepaliDateTrait
             'शुक्रबार' => 'शुक्र',
             'शनिबार' => 'शनि',
         };
+    }
+
+
+    public function performCalculationOnEnglishDate(): void
+    {
+        $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
+
+        if (!$checkIfIsInRange) {
+            throw new RuntimeException($checkIfIsInRange);
+        }
+
+        $totalEnglishDays = $this->calculateTotalEnglishDays($this->date->year, $this->date->month, $this->date->day);
+
+        $this->performCalculationBasedOn($totalEnglishDays);
     }
 
 
