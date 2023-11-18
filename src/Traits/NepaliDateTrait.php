@@ -62,8 +62,12 @@ trait NepaliDateTrait
         9 => '९',
     ];
 
-    public function toNepaliDate(): string
+    public function toNepaliDate(?string $format = NULL): string
     {
+        if ($format) {
+            return $this->toFormattedNepaliDate($format);
+        }
+
         $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
 
         if (! $checkIfIsInRange) {
@@ -82,7 +86,7 @@ trait NepaliDateTrait
     }
 
     public function toFormattedNepaliDate(
-        string $format = 'd F Y, l',
+        string $format = 'Y-m-d',
         string $locale = 'np'
     ): string {
         $nepaliDateArray = $this->toNepaliDateArray();
@@ -124,7 +128,7 @@ trait NepaliDateTrait
         ]);
     }
 
-    public function calculateTotalEnglishDays($year, $month, $day)
+    private function calculateTotalEnglishDays($year, $month, $day)
     {
         $totalEnglishDays = 0;
 
@@ -153,7 +157,7 @@ trait NepaliDateTrait
         return $totalEnglishDays;
     }
 
-    public function performCalculationBasedOn($totalEnglishDays): void
+    private function performCalculationBasedOn($totalEnglishDays): void
     {
         $i = 0;
         $j = $this->nepaliMonth;
@@ -188,12 +192,12 @@ trait NepaliDateTrait
         }
     }
 
-    public function formattedNepaliDateOfWeek($dayOfWeek)
+    private function formattedNepaliDateOfWeek($dayOfWeek)
     {
         return $this->dayOfWeekInNepali[$dayOfWeek];
     }
 
-    public function formattedNepaliNumber($value): string
+    private function formattedNepaliNumber($value): string
     {
         $numbers = str_split($value);
 
@@ -204,7 +208,7 @@ trait NepaliDateTrait
         return implode('', $numbers);
     }
 
-    public function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
+    private function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
         return [
             'Y' => $nepaliDateArray->npYear,
@@ -216,7 +220,7 @@ trait NepaliDateTrait
         ];
     }
 
-    public function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
+    private function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
         return [
             'Y' => $nepaliDateArray->year,
@@ -228,7 +232,7 @@ trait NepaliDateTrait
         ];
     }
 
-    public function isInEnglishDateRange(Carbon $date): string|bool
+    private function isInEnglishDateRange(Carbon $date): string|bool
     {
         if ($date->year < 1944 || $date->year > 2033) {
             return 'Date is out of range. Please provide date between 1944-01-01 to 2033-12-31';
