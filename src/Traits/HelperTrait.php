@@ -111,14 +111,14 @@ trait HelperTrait
     public function getOrdinalSuffix(int $number): string
     {
         if ($number % 100 >= 11 && $number % 100 <= 13) {
-            return $number . 'th';
+            return 'th';
         }
 
         return match ($number % 10) {
-            1 => $number . 'st',
-            2 => $number . 'nd',
-            3 => $number . 'rd',
-            default => $number . 'th',
+            1 => 'st',
+            2 => 'nd',
+            3 => 'rd',
+            default => 'th',
         };
     }
 
