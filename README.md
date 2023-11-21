@@ -112,7 +112,12 @@ Carbon::parse($engDate)->toNepaliDate(format: 'D, j F Y');
 // Result: सोम, १० वैशाख २०५३
 ```
 
-
+### Helper function
+```php
+// we do have a helper function to convert dates
+toBS("1996-04-22") // to convert English date to Nepali date (BS). ie. Output: 2053-01-10
+toAD("2053-01-10") // to convert Nepali date to English date (AD). ie. Output: 1996-04-22
+```
 ## Testing
 
 ```bash
