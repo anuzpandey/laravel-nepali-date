@@ -1,38 +1,32 @@
 <?php
 
 use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
+use Carbon\Carbon;
 
 if (!function_exists('toNepaliDate')) {
     /**
      * The function converts a given date to the Nepali date format
-     *
-     * @param string date The date parameter is a string that represents the date in the Gregorian
-     * calendar format. It should be in the format "YYYY-MM-DD" or "YYYY/MM/DD".
-     * @param string|null format The format parameter is used to specify the desired format of the Nepali
-     * date. It is an optional parameter and if not provided, the default format will be used.
-     * @param string|null locale The "locale" parameter is used to specify the language and region
-     * @return string Nepali date converted from the given date.
+     * @param string|Carbon $date <p>The date parameter is a string that represents the date in the English calendar format.</p>
+     * @param string|null $format <p>The format parameter is used to specify the desired format of the Nepali date.</p>
+     * @param string $locale <p>The "locale" parameter is used to specify the language and region. Supported languages are <i>en</i> and <i>np</i></p>
+     * @return string <p>Nepali date converted from the given English Date.</p>
      */
-    function toNepaliDate($date, $format = 'Y-m-d', $locale = 'en'): string
+    function toNepaliDate(string|Carbon $date, ?string $format = 'Y-m-d', string $locale = 'en'): string
     {
         return LaravelNepaliDate::from($date)
             ->toNepaliDate($format, $locale);
     }
 }
 
-
 if (!function_exists('toEnglishDate')) {
     /**
-     * The function converts a given date from Nepali (Bikram Sambat) to English format
-     * 
-     * @param string date The date parameter is a string that represents the date in the Gregorian
-     * calendar format. It should be in the format "YYYY-MM-DD" or "YYYY/MM/DD".
-     * @param string|null format The format parameter is used to specify the desired format of the English
-     * date. It is an optional parameter and if not provided, the default format will be used.
-     * @param string|null locale The "locale" parameter is used to specify the language and region
-     * @return string English date converted from the given Nepali Date.
+     * The function converts a given date to the English date format
+     * @param $date <p>The date parameter is a string that represents the date in the Nepali calendar format.</p>
+     * @param string $format <p>The format parameter is used to specify the desired format of the English date.</p>
+     * @param string $locale <p>The "locale" parameter is used to specify the language and region. Supported languages are <i>en</i> and <i>np</i></p>
+     * @return string <p>English date converted from the given Nepali Date.</p>
      */
-    function toEnglishDate($date, $format = 'Y-m-d', $locale = 'en'): string
+    function toEnglishDate(string|Carbon $date, string $format = 'Y-m-d', string $locale = 'en'): string
     {
         return LaravelNepaliDate::from($date)
             ->toEnglishDate($format, $locale);
