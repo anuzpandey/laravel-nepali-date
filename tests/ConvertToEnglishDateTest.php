@@ -32,7 +32,7 @@ it('can convert to nepali formatted result', function (string $format, string $l
 ]);
 
 it('can convert to basic nepali date to english date with helper function', function (string $date, string $expectedResult) {
-    expect(toAD($date))
+    expect(toEnglishDate($date))
         ->toBe($expectedResult);
 })->with([
     ['2053-01-10', '1996-04-22'],
@@ -42,7 +42,7 @@ it('can convert to basic nepali date to english date with helper function', func
 
 
 it('can convert to nepali formatted result to english date with helper function', function (string $format, string $locale, string $expectedResult) {
-    expect(toAD("2053-01-10", $format, $locale))
+    expect(toEnglishDate("2053-01-10", $format, $locale))
         ->toBe($expectedResult);
 })->with([
     ['d F Y, l', 'np', '२२ अप्रिल १९९६, सोमबार'],

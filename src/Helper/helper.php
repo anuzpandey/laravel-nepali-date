@@ -2,7 +2,7 @@
 
 use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
 
-if (!function_exists('toBS')) {
+if (!function_exists('toNepaliDate')) {
     /**
      * The function converts a given date to the Nepali date format
      *
@@ -13,15 +13,15 @@ if (!function_exists('toBS')) {
      * @param string|null locale The "locale" parameter is used to specify the language and region
      * @return string Nepali date converted from the given date.
      */
-    function toBS($date, $format = null, $locale = null): string
+    function toNepaliDate($date, $format = 'Y-m-d', $locale = 'en'): string
     {
         return LaravelNepaliDate::from($date)
-            ->toNepaliDate($format ?? 'Y-m-d', $locale ?? 'en');
+            ->toNepaliDate($format, $locale);
     }
 }
 
 
-if (!function_exists('toAD')) {
+if (!function_exists('toEnglishDate')) {
     /**
      * The function converts a given date from Nepali (Bikram Sambat) to English format
      * 
@@ -32,9 +32,9 @@ if (!function_exists('toAD')) {
      * @param string|null locale The "locale" parameter is used to specify the language and region
      * @return string English date converted from the given Nepali Date.
      */
-    function toAD($date, $format = null, $locale = null): string
+    function toEnglishDate($date, $format = 'Y-m-d', $locale = 'en'): string
     {
         return LaravelNepaliDate::from($date)
-            ->toEnglishDate($format ?? 'Y-m-d', $locale ?? 'en');
+            ->toEnglishDate($format, $locale);
     }
 }
