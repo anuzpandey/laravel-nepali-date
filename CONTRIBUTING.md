@@ -44,7 +44,13 @@ If the project maintainer has any additional requirements, you will find them li
 
 - **Add tests!** - Your patch won't be accepted if it doesn't have tests.
 
-- **Document any change in behaviour** - Make sure the `README.md` and any other relevant documentation are kept up-to-date.
+- **Proper Method Signature and Its Default Values** - When modifying or adding methods, ensure that the method signatures are clear and concise. Provide default values for parameters when necessary, balancing flexibility with readability for a more maintainable codebase.
+
+- **Method Name Consistency** - Maintain consistency in naming conventions for methods throughout the package. Consistent naming practices improve code cohesion and readability, facilitating a smoother collaborative development process.
+
+- **Unnecessary Docblock** - Evaluate the necessity of docblock comments for methods. If a method's functionality is clear without additional explanation, consider omitting the docblock. This helps enhance code readability while preserving clarity.
+
+- **README Updates** - Ensure the `README.md` is updated along with changes to the codebase. Reflect any modifications to method names or signatures, providing users with accurate examples and explanations for a cohesive experience.
 
 - **Consider our release cycle** - We try to follow [SemVer v2.0.0](http://semver.org/). Randomly breaking public APIs is not an option.
 
