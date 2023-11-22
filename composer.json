@@ -39,7 +39,10 @@
         "psr-4": {
             "Anuzpandey\\LaravelNepaliDate\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
-        }
+        },
+        "files": [
+            "src/Helper/helper.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
