@@ -14,10 +14,10 @@ You can install the package via composer:
 composer require anuzpandey/laravel-nepali-date
 ```
 
-Optionally, you can publish the views using
+Optionally, you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-nepali-date-views"
+php artisan vendor:publish --tag="nepali-date-config"
 ```
 
 ## Usage
