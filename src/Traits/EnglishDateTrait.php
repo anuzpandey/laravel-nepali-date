@@ -61,12 +61,11 @@ trait EnglishDateTrait
         9 => '9',
     ];
 
-
-    public function toEnglishDate(string $format = 'Y-m-d', string $locale = 'en'): string
+    public function toEnglishDate(string $format = null, string $locale = null): string
     {
         $checkIfIsInRange = $this->isInNepaliDateRange($this->date);
 
-        if (!$checkIfIsInRange) {
+        if (! $checkIfIsInRange) {
             throw new RuntimeException($checkIfIsInRange);
         }
 
@@ -74,9 +73,11 @@ trait EnglishDateTrait
 
         $this->performCalculationBasedonNepaliDays($totalNepaliDays);
 
-        return $this->toFormattedEnglishDate($format, $locale);
+        return $this->toFormattedEnglishDate(
+            $format ?? config('nepali-date.default_format'),
+            $locale ?? config('nepali-date.default_locale'),
+        );
     }
-
 
     public function toEnglishDateArray(): NepaliDateArrayData
     {
@@ -94,7 +95,6 @@ trait EnglishDateTrait
         ]);
     }
 
-
     public function isInNepaliDateRange(Carbon $date): string|bool
     {
         if ($date->year < 2000 || $date->year > 2089) {
@@ -111,7 +111,6 @@ trait EnglishDateTrait
 
         return true;
     }
-
 
     public function calculateTotalNepaliDays()
     {
@@ -135,7 +134,6 @@ trait EnglishDateTrait
 
         return $totalNepaliDays;
     }
-
 
     public function performCalculationBasedOnNepaliDays(string|int $totalNepaliDays): void
     {
@@ -175,7 +173,6 @@ trait EnglishDateTrait
         $this->englishDay = $totalEnglishDays > 9 ? $totalEnglishDays : '0' . $totalEnglishDays;
         $this->dayOfWeek = $_day;
     }
-
 
     public function toFormattedEnglishDate(
         string $format = 'd F Y, l',
