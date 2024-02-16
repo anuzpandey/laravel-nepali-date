@@ -71,10 +71,7 @@ trait NepaliDateTrait
         );
     }
 
-    public function toFormattedNepaliDate(
-        string $format = 'Y-m-d',
-        string $locale = 'np'
-    ): string
+    public function toFormattedNepaliDate(string $format, string $locale): string
     {
         $nepaliDateArray = $this->toNepaliDateArray();
 

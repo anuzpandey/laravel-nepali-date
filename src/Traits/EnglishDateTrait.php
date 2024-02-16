@@ -174,10 +174,7 @@ trait EnglishDateTrait
         $this->dayOfWeek = $_day;
     }
 
-    public function toFormattedEnglishDate(
-        string $format = 'd F Y, l',
-        string $locale = 'en'
-    ): string
+    public function toFormattedEnglishDate(string $format, string $locale): string
     {
         $englishDateArray = $this->toEnglishDateArray();
 
