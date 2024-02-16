@@ -9,6 +9,7 @@ class LaravelNepaliDateServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        $package->name('laravel-nepali-date');
+        $package->name('laravel-nepali-date')
+            ->hasConfigFile();
     }
 }
