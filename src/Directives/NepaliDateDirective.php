@@ -3,6 +3,7 @@
 namespace Anuzpandey\LaravelNepaliDate\Directives;
 
 use Illuminate\Support\Facades\Blade;
+use InvalidArgumentException;
 
 class NepaliDateDirective
 {
@@ -21,17 +22,23 @@ class NepaliDateDirective
         });
     }
 
-    private static function getParsedArguments(string $expression): array
+    private static function getParsedArguments(string $inputArguments): array
     {
-        $segments = explode(',', str_replace(['(', ')', ' '], '', $expression));
-        $date = $segments[0] ?? null;
-        $format = $segments[1] ?? null;
-        $locale = $segments[2] ?? null;
+        $expression = explode(',', str_replace(['(', ')'], '', $inputArguments));
+        $date = $expression[0] ? trim($expression[0]) : 'null';
+        $format = $expression[1] ? trim($expression[1]) : 'null';
+        $locale = $expression[2] ? trim($expression[2]) : 'null';
+
+        if (count($expression) > 3) {
+            throw new InvalidArgumentException(
+                'Too many arguments provided for the directive OR You have placed comma in the date format. Comma in the date format is not supported yet.',
+            );
+        }
 
         return [
             $date === 'now' ? 'now()' : $date,
-            $format === 'null' ? null : $format,
-            $locale === 'null' ? null : $locale,
+            $format,
+            $locale,
         ];
     }
 }
