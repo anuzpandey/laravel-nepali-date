@@ -25,9 +25,9 @@ class NepaliDateDirective
     private static function getParsedArguments(string $inputArguments): array
     {
         $expression = explode(',', str_replace(['(', ')'], '', $inputArguments));
-        $date = $expression[0] ? trim($expression[0]) : 'null';
-        $format = $expression[1] ? trim($expression[1]) : 'null';
-        $locale = $expression[2] ? trim($expression[2]) : 'null';
+        $date = isset($expression[0]) ? trim($expression[0]) : 'null';
+        $format = isset($expression[1]) ? trim($expression[1]) : 'null';
+        $locale = isset($expression[2]) ? trim($expression[2]) : 'null';
 
         if (count($expression) > 3) {
             throw new InvalidArgumentException(
