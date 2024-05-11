@@ -45,6 +45,16 @@ LaravelNepaliDate::from($nepDate)->toEnglishDate(format: 'l, jS F Y');
 // Format Specifiers are supported and listed below
 LaravelNepaliDate::from($nepDate)->toEnglishDate(format: 'l, j F Y', locale: 'np');
 // Result: आइतबार, २२ बैशाख १९९६
+
+// Get total days in a month of a year
+use Anuzpandey\LaravelNepaliDate\Enums\NepaliMonth;
+// month can be NepaliMonth::XXX or month number (1-12)
+LaravelNepaliDate::daysInMonth(NepaliMonth::BAISAKH, 2053);
+// Result: 31
+
+// Get total days in a year
+LaravelNepaliDate::daysInYear(2053);
+// Result: 365
 ```
 
 ## Format Specifiers
