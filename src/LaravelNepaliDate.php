@@ -21,7 +21,8 @@ class LaravelNepaliDate
 
     public function __construct(
         public string|Carbon $date,
-    ) {
+    )
+    {
     }
 
     public static function from(string|Carbon $date): LaravelNepaliDate

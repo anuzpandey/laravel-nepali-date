@@ -2,7 +2,9 @@
 
 namespace Anuzpandey\LaravelNepaliDate\Traits;
 
+use Anuzpandey\LaravelNepaliDate\Constants\NepaliDate;
 use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
+use Anuzpandey\LaravelNepaliDate\Enums\NepaliMonth;
 use Carbon\Carbon;
 use RuntimeException;
 
@@ -61,6 +63,39 @@ trait NepaliDateTrait
         9 => '९',
     ];
 
+    public static function daysInMonth(string|int|NepaliMonth $month, string|int $year): int
+    {
+        $monthIndex = is_string($month)
+            ? NepaliMonth::from($month)->value
+            : ($month instanceof NepaliMonth ? $month->value : (int) $month);
+
+        $yearIndex = self::getCalendarYearIndex($year);
+
+        if ($yearIndex === false) {
+            throw new RuntimeException('Year is out of range. Please provide a year between 2000-2090');
+        }
+
+        return NepaliDate::$CALENDAR_DATA[$yearIndex][$monthIndex];
+    }
+
+    public static function daysInYear(string|int $year): int
+    {
+        $yearIndex = self::getCalendarYearIndex($year);
+
+        if ($yearIndex === false) {
+            throw new RuntimeException('Year is out of range. Please provide a year between 2000-2090');
+        }
+
+        return array_sum(array_slice(NepaliDate::$CALENDAR_DATA[$yearIndex], 1));
+    }
+
+    public static function getCalendarYearIndex($year): bool|int
+    {
+        $calendarData = NepaliDate::$CALENDAR_DATA;
+
+        return collect($calendarData)->search(fn ($data) => $data[0] === (int) $year);
+    }
+
     public function toNepaliDate(?string $format = null, ?string $locale = null): string
     {
         $this->performCalculationOnEnglishDate();
@@ -80,8 +115,8 @@ trait NepaliDateTrait
 
     public function toNepaliDateArray(): NepaliDateArrayData
     {
-        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
-        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
+        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
+        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
 
         return NepaliDateArrayData::from([
             'year' => $this->nepaliYear,
