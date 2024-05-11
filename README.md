@@ -22,6 +22,8 @@ php artisan vendor:publish --tag="nepali-date-config"
 
 ## Usage
 
+> **Note:** The `toEnglishDate` function has a bug, where it cannot convert dates having a day greater than 31. This is because the package uses the `Carbon` library, which does not support dates greater than 31. This issue will be fixed in the next release.
+
 ```php
 $engDate = '1996-04-22';
 LaravelNepaliDate::from($engDate)->toNepaliDate();
