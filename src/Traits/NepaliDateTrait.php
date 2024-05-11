@@ -61,7 +61,7 @@ trait NepaliDateTrait
         9 => '९',
     ];
 
-    public function toNepaliDate(string $format = null, string $locale = null): string
+    public function toNepaliDate(?string $format = null, ?string $locale = null): string
     {
         $this->performCalculationOnEnglishDate();
 
@@ -80,8 +80,8 @@ trait NepaliDateTrait
 
     public function toNepaliDateArray(): NepaliDateArrayData
     {
-        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
-        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
+        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
+        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
 
         return NepaliDateArrayData::from([
             'year' => $this->nepaliYear,
@@ -231,5 +231,4 @@ trait NepaliDateTrait
 
         return true;
     }
-
 }

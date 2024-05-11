@@ -11,7 +11,6 @@ use Closure;
  */
 class NepaliDateMixin
 {
-
     public function toNepaliDate(): Closure
     {
         return function (?string $format = 'Y-m-d', ?string $locale = 'np') {
@@ -21,7 +20,6 @@ class NepaliDateMixin
         };
     }
 
-
     public function toEnglishDate(): Closure
     {
         return function (?string $format = 'Y-m-d', ?string $locale = 'en') {
@@ -30,5 +28,4 @@ class NepaliDateMixin
             return LaravelNepaliDate::from($date)->toEnglishDate($format, $locale);
         };
     }
-
 }

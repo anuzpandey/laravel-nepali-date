@@ -30,7 +30,6 @@ it('can convert to nepali formatted result', function (string $format, string $l
     ['Y/m/d', 'np', '२०५३/०१/१०'],
 ]);
 
-
 it('can convert to basic nepali date with helper function toNepaliDate', function (string $date, string $expectedResult) {
     expect(toNepaliDate($date))
         ->toBe($expectedResult);
@@ -41,7 +40,7 @@ it('can convert to basic nepali date with helper function toNepaliDate', functio
 ]);
 
 it('can convert to nepali formatted result with helper function toNepaliDate', function (string $format, string $locale, string $expectedResult) {
-    expect(toNepaliDate("1996-04-22", $format, $locale))
+    expect(toNepaliDate('1996-04-22', $format, $locale))
         ->toBe($expectedResult);
 })->with([
     ['d F Y, l', 'np', '१० वैशाख २०५३, सोमबार'],

@@ -61,7 +61,7 @@ trait EnglishDateTrait
         9 => '9',
     ];
 
-    public function toEnglishDate(string $format = null, string $locale = null): string
+    public function toEnglishDate(?string $format = null, ?string $locale = null): string
     {
         $checkIfIsInRange = $this->isInNepaliDateRange($this->date);
 
@@ -169,8 +169,8 @@ trait EnglishDateTrait
         }
 
         $this->englishYear = $_year;
-        $this->englishMonth = $_month > 9 ? $_month : '0' . $_month;
-        $this->englishDay = $totalEnglishDays > 9 ? $totalEnglishDays : '0' . $totalEnglishDays;
+        $this->englishMonth = $_month > 9 ? $_month : '0'.$_month;
+        $this->englishDay = $totalEnglishDays > 9 ? $totalEnglishDays : '0'.$totalEnglishDays;
         $this->dayOfWeek = $_day;
     }
 

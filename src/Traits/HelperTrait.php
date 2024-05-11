@@ -38,7 +38,6 @@ trait HelperTrait
         return str_replace($en_number, $np_number, $number);
     }
 
-
     public function convertEnToNpWord($word): array|string
     {
         $en_word = [
@@ -82,7 +81,6 @@ trait HelperTrait
         return str_replace($en_word, $np_word, $word);
     }
 
-
     public function getFormattedString(string $format, array $formatData, string $locale): string
     {
         $formattedString = '';
@@ -92,7 +90,9 @@ trait HelperTrait
 
             if (array_key_exists($char, $formatData)) {
                 if ($locale === 'np') {
-                    if ($char === 'S') continue;
+                    if ($char === 'S') {
+                        continue;
+                    }
                     $formattedString .= $formatData[$char];
                 } else {
                     if ($char === 'S') {
@@ -105,9 +105,9 @@ trait HelperTrait
                 $formattedString .= $char;
             }
         }
+
         return $formattedString;
     }
-
 
     public function getOrdinalSuffix(int $number): string
     {
@@ -122,7 +122,6 @@ trait HelperTrait
             default => 'th',
         };
     }
-
 
     private function getNepaliLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
@@ -139,7 +138,6 @@ trait HelperTrait
         ];
     }
 
-
     private function getEnglishLocaleFormattingCharacters(NepaliDateArrayData $nepaliDateArray): array
     {
         return [
@@ -154,7 +152,6 @@ trait HelperTrait
             'D' => $this->getShortDayName($nepaliDateArray->dayName, 'en'),
         ];
     }
-
 
     private function formatDateString(string $format, string $locale, $dateArray): string
     {
