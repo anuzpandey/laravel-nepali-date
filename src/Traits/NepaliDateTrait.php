@@ -159,13 +159,13 @@ trait NepaliDateTrait
 
     public function performCalculationOnEnglishDate(): void
     {
-        $checkIfIsInRange = $this->isInEnglishDateRange($this->date);
+        $checkIfIsInRange = $this->isInEnglishDateRange($this->year, $this->month, $this->day);
 
         if (! $checkIfIsInRange) {
             throw new RuntimeException($checkIfIsInRange);
         }
 
-        $totalEnglishDays = $this->calculateTotalEnglishDays($this->date->year, $this->date->month, $this->date->day);
+        $totalEnglishDays = $this->calculateTotalEnglishDays($this->year, $this->month, $this->day);
 
         $this->performCalculationBasedOn($totalEnglishDays);
     }
@@ -250,17 +250,17 @@ trait NepaliDateTrait
         return implode('', $numbers);
     }
 
-    private function isInEnglishDateRange(Carbon $date): string|bool
+    private function isInEnglishDateRange(int $year, int $month, int $day): string|bool
     {
-        if ($date->year < 1944 || $date->year > 2033) {
+        if ($year < 1944 || $year > 2033) {
             return 'Date is out of range. Please provide date between 1944-01-01 to 2033-12-31';
         }
 
-        if ($date->month < 1 || $date->month > 12) {
+        if ($month < 1 || $month > 12) {
             return 'Month is out of range. Please provide month between 1-12';
         }
 
-        if ($date->day < 1 || $date->day > 31) {
+        if ($day < 1 || $day > 31) {
             return 'Day is out of range. Please provide day between 1-31';
         }
 

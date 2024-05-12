@@ -30,6 +30,6 @@ class LaravelNepaliDate
     {
         [$year, $month, $day] = Str::of($date)->explode('-')->toArray();
 
-        return new static($year, $month, $day);
+        return new static((int) $year, (int) $month, (int) $day);
     }
 }
