@@ -62,6 +62,7 @@ LaravelNepaliDate::daysInYear(2053);
 ## Format Specifiers
 
 The following format specifiers are supported for formatting dates:
+
 - `Y` - Year in four digits
 - `y` - Year in two digits
 - `m` - Month in two digits with leading zero (01-12/०१-१२)
@@ -75,56 +76,11 @@ The following format specifiers are supported for formatting dates:
 - `S` - Day in two letters (st, nd, rd, th)
 
 ## Extending Carbon with NepaliDateMixin
-In order to use the `toNepaliDate` and `toEnglishDate` mixin on Carbon instances, you need to register the `NepaliDateMixin` mixin in your Laravel service provider.
 
-You can do so by adding the following code to your `AppServiceProvider`
-```php
-<?php
-
-use Anuzpandey\LaravelNepaliDate\NepaliDateMixin;
-use Carbon\Carbon;
-use Illuminate\Support\ServiceProvider;
-
-class AppServiceProvider extends ServiceProvider
-{
-    public function boot(): void
-    {
-        // Register the NepaliDateMixin
-        Carbon::mixin(new NepaliDateMixin());
-    }
-}
-```
-
-Or create your own service provider with `php artisan make:provider MacroableServiceProvider`,
-register it in `config/app.php` and add the following code to the `boot` method.
-```php
-<?php
-
-use Anuzpandey\LaravelNepaliDate\NepaliDateMixin;
-use Carbon\Carbon;
-use Illuminate\Support\ServiceProvider;
-
-class MacroableServiceProvider extends ServiceProvider
-{
-    public function boot(): void
-    {
-        // Register the NepaliDateMixin
-        Carbon::mixin(new NepaliDateMixin());
-    }
-}
-```
-
-### Usage with Mixin
-```php
-$engDate = '1996-04-22';
-Carbon::parse($engDate)->toNepaliDate();
-// Result: 2053-01-10
-
-Carbon::parse($engDate)->toNepaliDate(format: 'D, j F Y');
-// Result: सोम, १० वैशाख २०५३
-```
+> **Note:** This feature has been deprecated as Carbon doesn't support the months having more than 31 days. This feature has been removed from version 2.0.0.
 
 ### Helper function
+
 ```php
 // Convert English date to Nepali date (B.S.).
 toNepaliDate("1996-04-22") 
@@ -134,6 +90,7 @@ toNepaliDate("1996-04-22")
 toEnglishDate("2053-01-10") 
 // Result: 1996-04-22
 ```
+
 ## Testing
 
 ```bash
