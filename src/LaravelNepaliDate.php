@@ -8,7 +8,7 @@ use Anuzpandey\LaravelNepaliDate\Traits\EnglishDateTrait;
 use Anuzpandey\LaravelNepaliDate\Traits\HelperTrait;
 use Anuzpandey\LaravelNepaliDate\Traits\IsLeapYearTrait;
 use Anuzpandey\LaravelNepaliDate\Traits\NepaliDateTrait;
-use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class LaravelNepaliDate
 {
@@ -20,17 +20,16 @@ class LaravelNepaliDate
     use NepaliDateTrait;
 
     public function __construct(
-        public string|Carbon $date,
-    )
-    {
+        public int|string $year,
+        public int|string $month,
+        public int|string $day,
+    ) {
     }
 
-    public static function from(string|Carbon $date): LaravelNepaliDate
+    public static function from(string $date): LaravelNepaliDate
     {
-        $parsedDate = ($date instanceof Carbon)
-            ? $date
-            : Carbon::parse($date);
+        [$year, $month, $day] = Str::of($date)->explode('-')->toArray();
 
-        return new static($parsedDate);
+        return new static((int) $year, (int) $month, (int) $day);
     }
 }

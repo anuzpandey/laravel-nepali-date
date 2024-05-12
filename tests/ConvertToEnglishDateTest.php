@@ -11,6 +11,9 @@ it('can convert to basic nepali date', function (string $date, string $expectedR
     ['2053-01-10', '1996-04-22'],
     ['2029-04-04', '1972-07-19'],
     ['2022-12-20', '1966-04-02'],
+    ['2081-01-30', '2024-05-12'],
+    ['2081-02-32', '2024-06-14'],
+    ['2081-02-32', '2024-06-14'],
 ]);
 
 it('can convert to nepali formatted result', function (string $format, string $locale, string $expectedResult) {
