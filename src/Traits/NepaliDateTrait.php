@@ -5,7 +5,6 @@ namespace Anuzpandey\LaravelNepaliDate\Traits;
 use Anuzpandey\LaravelNepaliDate\Constants\NepaliDate;
 use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
 use Anuzpandey\LaravelNepaliDate\Enums\NepaliMonth;
-use Carbon\Carbon;
 use RuntimeException;
 
 trait NepaliDateTrait
@@ -115,8 +114,8 @@ trait NepaliDateTrait
 
     public function toNepaliDateArray(): NepaliDateArrayData
     {
-        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0' . $this->nepaliMonth;
-        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0' . $this->nepaliDay;
+        $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
+        $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
 
         return NepaliDateArrayData::from([
             'year' => $this->nepaliYear,

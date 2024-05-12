@@ -3,7 +3,6 @@
 namespace Anuzpandey\LaravelNepaliDate\Traits;
 
 use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
-use Carbon\Carbon;
 use RuntimeException;
 
 trait EnglishDateTrait
@@ -63,7 +62,7 @@ trait EnglishDateTrait
 
     public function toEnglishDate(?string $format = null, ?string $locale = null): string
     {
-        $checkIfIsInRange = $this->isInNepaliDateRange($this->date);
+        $checkIfIsInRange = $this->isInNepaliDateRange($this->year, $this->month, $this->day);
 
         if (! $checkIfIsInRange) {
             throw new RuntimeException($checkIfIsInRange);
@@ -95,17 +94,17 @@ trait EnglishDateTrait
         ]);
     }
 
-    public function isInNepaliDateRange(Carbon $date): string|bool
+    public function isInNepaliDateRange(int $year, int $month, int $day): string|bool
     {
-        if ($date->year < 2000 || $date->year > 2089) {
+        if ($year < 2000 || $year > 2089) {
             return 'Date is out of range. Please provide date between 2000 to 2089';
         }
 
-        if ($date->month < 1 || $date->month > 12) {
+        if ($month < 1 || $month > 12) {
             return 'Month is out of range. Please provide month between 1-12';
         }
 
-        if ($date->day < 1 || $date->day > 32) {
+        if ($day < 1 || $day > 32) {
             return 'Day is out of range. Please provide day between 1-32';
         }
 
@@ -117,7 +116,7 @@ trait EnglishDateTrait
         $totalNepaliDays = 0;
         $k = 0;
 
-        for ($i = 0; $i < ($this->date->year - $this->nepaliYear); $i++) {
+        for ($i = 0; $i < ($this->year - $this->nepaliYear); $i++) {
             for ($j = 1; $j <= 12; $j++) {
                 $totalNepaliDays += $this->calendarData[$k][$j];
             }
@@ -125,12 +124,12 @@ trait EnglishDateTrait
         }
 
         // Count Total Days in terms of month
-        for ($j = 1; $j < $this->date->month; $j++) {
+        for ($j = 1; $j < $this->month; $j++) {
             $totalNepaliDays += $this->calendarData[$k][$j];
         }
 
         // Count Total Days in Terms of days
-        $totalNepaliDays += $this->date->day;
+        $totalNepaliDays += $this->day;
 
         return $totalNepaliDays;
     }
