@@ -76,7 +76,6 @@ The following format specifiers are supported for formatting dates:
 - `S` - Day in two letters (st, nd, rd, th)
 
 ## Extending Carbon with NepaliDateMixin
-
 > **Note:** This feature has been deprecated as Carbon doesn't support the months having more than 31 days. This feature has been removed from version 2.0.0.
 
 ### Helper function
