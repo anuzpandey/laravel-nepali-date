@@ -114,6 +114,8 @@ trait NepaliDateTrait
 
     public function toNepaliDateArray(): NepaliDateArrayData
     {
+        $this->performCalculationOnEnglishDate();
+
         $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
         $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
 
