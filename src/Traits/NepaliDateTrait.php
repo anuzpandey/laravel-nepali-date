@@ -107,7 +107,7 @@ trait NepaliDateTrait
 
     public function toFormattedNepaliDate(string $format, string $locale): string
     {
-        $nepaliDateArray = $this->toNepaliDateArray();
+        $nepaliDateArray = $this->toNepaliDateArrayData();
 
         return $this->formatDateString($format, $locale, $nepaliDateArray);
     }
@@ -116,6 +116,11 @@ trait NepaliDateTrait
     {
         $this->performCalculationOnEnglishDate();
 
+        return $this->toNepaliDateArrayData();
+    }
+
+    private function toNepaliDateArrayData(): NepaliDateArrayData
+    {
         $nepaliMonth = $this->nepaliMonth > 9 ? $this->nepaliMonth : '0'.$this->nepaliMonth;
         $nepaliDay = $this->nepaliDay > 9 ? $this->nepaliDay : '0'.$this->nepaliDay;
 

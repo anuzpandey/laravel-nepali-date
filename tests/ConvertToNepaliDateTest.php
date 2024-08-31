@@ -4,9 +4,7 @@ use Anuzpandey\LaravelNepaliDate\Enums\NepaliMonth;
 use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
 
 it('can convert to basic nepali date', function (string $date, string $expectedResult) {
-    $nepaliDate = LaravelNepaliDate::from($date)->toNepaliDate();
-
-    expect($nepaliDate)
+    expect(LaravelNepaliDate::from($date)->toNepaliDate())
         ->toBe($expectedResult);
 })->with([
     ['1996-04-22', '2053-01-10'],
@@ -15,9 +13,7 @@ it('can convert to basic nepali date', function (string $date, string $expectedR
 ]);
 
 it('can convert to nepali formatted result', function (string $format, string $locale, string $expectedResult) {
-    $date = '1996-04-22';
-
-    expect(LaravelNepaliDate::from($date)->toNepaliDate(format: $format, locale: $locale))
+    expect(LaravelNepaliDate::from('1996-04-22')->toNepaliDate(format: $format, locale: $locale))
         ->toBe($expectedResult);
 })->with([
     ['d F Y, l', 'np', '१० वैशाख २०५३, सोमबार'],
@@ -82,4 +78,12 @@ it('can get the total number of days in given year', function (int $year, int $e
     [2022, 365],
     [2026, 366],
     [2053, 365],
+]);
+
+it('can get proper output for toNepaliDateArray function', function (string $date, array $expectedResult) {
+    expect(LaravelNepaliDate::from($date)->toNepaliDateArray())
+        ->toMatchArray($expectedResult);
+})->with([
+    ['1996-04-22', ['year' => '2053', 'month' => '01', 'day' => '10']],
+    ['1972-07-19', ['year' => '2029', 'month' => '04', 'day' => '04']],
 ]);
