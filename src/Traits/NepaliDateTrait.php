@@ -99,14 +99,14 @@ trait NepaliDateTrait
     {
         $this->performCalculationOnEnglishDate();
 
-        return $this->toFormattedNepaliDate(
-            $format ?? config('nepali-date.default_format'),
-            $locale ?? config('nepali-date.default_locale'),
-        );
+        return $this->toFormattedNepaliDate($format, $locale);
     }
 
-    public function toFormattedNepaliDate(string $format, string $locale): string
+    public function toFormattedNepaliDate(?string $format = null, ?string $locale = null): string
     {
+        $format = $format ?? config('nepali-date.default_format');
+        $locale = $locale ?? config('nepali-date.default_locale');
+
         $nepaliDateArray = $this->toNepaliDateArrayData();
 
         return $this->formatDateString($format, $locale, $nepaliDateArray);
