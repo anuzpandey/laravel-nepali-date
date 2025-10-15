@@ -33,16 +33,16 @@
     "autoload": {
         "psr-4": {
             "Anuzpandey\\LaravelNepaliDate\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helper/helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "Anuzpandey\\LaravelNepaliDate\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
-        },
-        "files": [
-            "src/Helper/helper.php"
-        ]
+        }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
