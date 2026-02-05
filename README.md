@@ -80,11 +80,11 @@ The following format specifiers are supported for formatting dates:
 
 ```php
 // Convert English date to Nepali date (B.S.).
-toNepaliDate("1996-04-22") 
+toNepaliDate("1996-04-22")
 // Result: 2053-01-10
 
 // Convert Nepali date to English date (A.D.).
-toEnglishDate("2053-01-10") 
+toEnglishDate("2053-01-10")
 // Result: 1996-04-22
 ```
 
@@ -117,6 +117,24 @@ You can use the Blade directives directly in your views:
 @englishDate('2053-01-10', 'l, d F Y', 'en')
 {{-- Result: Monday, 22 April 1996 --}}
 ```
+
+
+## Artisan Commands
+
+Run quick conversions from the CLI:
+
+```bash
+php artisan nepali-date:convert --from=1996-04-22 --to=np
+php artisan nepali-date:today
+php artisan nepali-date:range --from=2080-01-01 --until=2080-01-05 --calendar=np --to=en
+```
+
+Common options:
+- `--format=` Output format (defaults to `config('nepali-date.default_format')`)
+- `--locale=` Output locale `en` or `np`
+- `--strict` Enable stricter date validation
+- `--json` Emit JSON output
+- `--timezone=` Timezone for `today`
 
 ## Getting Date as Array
 
