@@ -54,12 +54,12 @@ it('validates nepali date range correctly', function () {
     // Valid dates return true
     expect($instance->isInNepaliDateRange(2050, 6, 15))->toBe(true);
     expect($instance->isInNepaliDateRange(2000, 1, 1))->toBe(true);
-    expect($instance->isInNepaliDateRange(2089, 12, 30))->toBe(true);
+    expect($instance->isInNepaliDateRange(2099, 12, 30))->toBe(true);
 
     // Invalid year returns error string
     expect($instance->isInNepaliDateRange(1999, 1, 1))->toBeString()
         ->toContain('Date is out of range');
-    expect($instance->isInNepaliDateRange(2090, 1, 1))->toBeString()
+    expect($instance->isInNepaliDateRange(2100, 1, 1))->toBeString()
         ->toContain('Date is out of range');
 
     // Invalid month returns error string

@@ -135,8 +135,8 @@ abstract class BaseNepaliDateCommand extends Command
             return;
         }
 
-        if ($year < 2000 || $year > 2089) {
-            throw new InvalidArgumentException('Date is out of range. Please provide date between 2000 to 2089');
+        if ($year < 2000 || $year > 2099) {
+            throw new InvalidArgumentException('Date is out of range. Please provide date between 2000 to 2099');
         }
 
         if ($month < 1 || $month > 12) {
