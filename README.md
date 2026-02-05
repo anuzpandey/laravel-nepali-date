@@ -88,6 +88,67 @@ toEnglishDate("2053-01-10")
 // Result: 1996-04-22
 ```
 
+## Blade Directives
+
+You can use the Blade directives directly in your views:
+
+```blade
+{{-- Convert English date to Nepali date --}}
+@nepaliDate('1996-04-22')
+{{-- Result: 2053-01-10 --}}
+
+{{-- With format --}}
+@nepaliDate('1996-04-22', 'l, d F Y')
+{{-- Result: सोमबार, १० वैशाख २०५३ --}}
+
+{{-- With format and locale --}}
+@nepaliDate('1996-04-22', 'l, d F Y', 'en')
+{{-- Result: Monday, 10 Baisakh 2053 --}}
+
+{{-- Convert Nepali date to English date --}}
+@englishDate('2053-01-10')
+{{-- Result: 1996-04-22 --}}
+
+{{-- With format --}}
+@englishDate('2053-01-10', 'l, d F Y')
+{{-- Result: सोमबार, २२ अप्रिल १९९६ --}}
+
+{{-- With format and locale --}}
+@englishDate('2053-01-10', 'l, d F Y', 'en')
+{{-- Result: Monday, 22 April 1996 --}}
+```
+
+## Getting Date as Array
+
+You can get the date components as an array for more flexibility:
+
+```php
+$engDate = '1996-04-22';
+$dateArray = LaravelNepaliDate::from($engDate)->toNepaliDateArray();
+// Returns NepaliDateArrayData object with:
+// - year: '2053'
+// - month: '01'
+// - day: '10'
+// - npYear: '२०५३'
+// - npMonth: '०१'
+// - npDay: '१०'
+// - dayName: 'Monday'
+// - monthName: 'Baisakh'
+// - npDayName: 'सोमबार'
+// - npMonthName: 'वैशाख'
+
+$nepDate = '2053-01-10';
+$dateArray = LaravelNepaliDate::from($nepDate)->toEnglishDateArray();
+// Returns similar structure with English date data
+```
+
+## Supported Date Ranges
+
+| Calendar | From | To |
+|----------|------|-----|
+| English (A.D.) | 1944-01-01 | 2033-12-31 |
+| Nepali (B.S.) | 2000-09-17 | 2099-12-30 |
+
 ## Testing
 
 ```bash
