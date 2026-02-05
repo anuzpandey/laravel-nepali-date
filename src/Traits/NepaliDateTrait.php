@@ -167,11 +167,7 @@ trait NepaliDateTrait
 
     public function performCalculationOnEnglishDate(): void
     {
-        $checkIfIsInRange = $this->isInEnglishDateRange($this->year, $this->month, $this->day);
-
-        if (! $checkIfIsInRange) {
-            throw new RuntimeException($checkIfIsInRange);
-        }
+        $this->assertEnglishDate();
 
         $totalEnglishDays = $this->calculateTotalEnglishDays($this->year, $this->month, $this->day);
 
