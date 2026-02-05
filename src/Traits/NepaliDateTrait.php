@@ -149,6 +149,7 @@ trait NepaliDateTrait
                 'Thursday' => 'Thu',
                 'Friday' => 'Fri',
                 'Saturday' => 'Sat',
+                default => $npDayName,
             };
         }
 
@@ -160,6 +161,7 @@ trait NepaliDateTrait
             'बिहिबार' => 'बिहि',
             'शुक्रबार' => 'शुक्र',
             'शनिबार' => 'शनि',
+            default => $npDayName,
         };
     }
 
