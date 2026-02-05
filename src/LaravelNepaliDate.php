@@ -22,7 +22,9 @@ class LaravelNepaliDate
     use NepaliDateTrait;
 
     private bool $strictValidation;
+
     private string $inputFormat = 'Y-m-d';
+
     private ?string $inputDate = null;
 
     public function __construct(
@@ -139,6 +141,7 @@ class LaravelNepaliDate
                 ':month' => str_pad((string) $month, 2, '0', STR_PAD_LEFT),
             ]);
             self::handleInvalid($message, $throwOnInvalid, ['year' => $year, 'month' => $month, 'day' => $day]);
+
             return false;
         }
 
@@ -177,6 +180,7 @@ class LaravelNepaliDate
                     ':max' => $daysInMonth,
                 ]);
                 self::handleInvalid($message, $throwOnInvalid, ['year' => $year, 'month' => $month, 'day' => $day]);
+
                 return false;
             }
         }
@@ -238,11 +242,13 @@ class LaravelNepaliDate
             if ($escape) {
                 $pattern .= preg_quote($char, '/');
                 $escape = false;
+
                 continue;
             }
 
             if ($char === '\\\\') {
                 $escape = true;
+
                 continue;
             }
 
@@ -256,6 +262,7 @@ class LaravelNepaliDate
                 $used[$name] = true;
                 $quantifier = $min === $max ? "{{$min}}" : "{{$min},{$max}}";
                 $pattern .= "(?P<{$name}>\\d{$quantifier})";
+
                 continue;
             }
 
