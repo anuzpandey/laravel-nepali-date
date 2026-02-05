@@ -246,7 +246,7 @@ class LaravelNepaliDate
                 continue;
             }
 
-            if ($char === '\\\\') {
+            if ($char === '\\') {
                 $escape = true;
 
                 continue;
