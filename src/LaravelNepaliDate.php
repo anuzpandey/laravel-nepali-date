@@ -26,10 +26,10 @@ class LaravelNepaliDate
     ) {
     }
 
-    public static function from(string $date): LaravelNepaliDate
+    public static function from(string $date): self
     {
         [$year, $month, $day] = Str::of($date)->explode('-')->toArray();
 
-        return new static((int) $year, (int) $month, (int) $day);
+        return new self((int) $year, (int) $month, (int) $day);
     }
 }
