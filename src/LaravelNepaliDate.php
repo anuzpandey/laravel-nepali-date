@@ -105,12 +105,12 @@ class LaravelNepaliDate
 
     protected function assertEnglishDate(): void
     {
-        self::assertEnglishComponents((int) $this->year, (int) $this->month, (int) $this->day, $this->shouldStrictValidate(), self::shouldThrowOnInvalid());
+        self::assertEnglishComponents((int) $this->year, (int) $this->month, (int) $this->day, $this->shouldStrictValidate(), true);
     }
 
     protected function assertNepaliDate(): void
     {
-        self::assertNepaliComponents((int) $this->year, (int) $this->month, (int) $this->day, $this->shouldStrictValidate(), self::shouldThrowOnInvalid());
+        self::assertNepaliComponents((int) $this->year, (int) $this->month, (int) $this->day, $this->shouldStrictValidate(), true);
     }
 
     protected static function assertEnglishComponents(int $year, int $month, int $day, bool $strict, ?bool $throwOnInvalid = null): bool

@@ -17,6 +17,12 @@ it('throws on invalid english date when configured', function () {
     LaravelNepaliDate::validateEnglish('2023-02-29');
 })->throws(InvalidDateException::class, 'Invalid day for 2023-02');
 
+it('throws on invalid english date during strict conversion even when throw_on_invalid is false', function () {
+    config()->set('nepali-date.validation.throw_on_invalid', false);
+
+    LaravelNepaliDate::from('2023-02-29', strict: true)->toNepaliDate();
+})->throws(InvalidDateException::class, 'Invalid day for 2023-02');
+
 it('validates nepali dates strictly', function () {
     config()->set('nepali-date.validation.throw_on_invalid', false);
 
