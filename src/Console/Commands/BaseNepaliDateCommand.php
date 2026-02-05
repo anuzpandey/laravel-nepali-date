@@ -64,11 +64,13 @@ abstract class BaseNepaliDateCommand extends Command
             if ($escape) {
                 $pattern .= preg_quote($char, '/');
                 $escape = false;
+
                 continue;
             }
 
             if ($char === '\\') {
                 $escape = true;
+
                 continue;
             }
 
@@ -82,6 +84,7 @@ abstract class BaseNepaliDateCommand extends Command
                 $used[$name] = true;
                 $quantifier = $min === $max ? "{{$min}}" : "{{$min},{$max}}";
                 $pattern .= "(?P<{$name}>\\d{$quantifier})";
+
                 continue;
             }
 

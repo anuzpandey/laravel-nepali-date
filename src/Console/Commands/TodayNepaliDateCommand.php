@@ -76,7 +76,7 @@ class TodayNepaliDateCommand extends BaseNepaliDateCommand
             $this->line("Formatted (np): {$nepaliFormatted}");
 
             return self::SUCCESS;
-        } catch (InvalidArgumentException | RuntimeException $exception) {
+        } catch (InvalidArgumentException|RuntimeException $exception) {
             $this->error($exception->getMessage());
 
             return self::FAILURE;
