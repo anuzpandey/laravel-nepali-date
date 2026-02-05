@@ -211,7 +211,7 @@ trait NepaliDateTrait
         $j = $this->nepaliMonth;
 
         while ($totalEnglishDays != 0) {
-            $lastDayOfMonth = $this->calendarData[$i][$j];
+            $lastDayOfMonth = $this->getCalendarData()[$i][$j];
 
             $this->nepaliDay++;
             $this->dayOfWeek++;

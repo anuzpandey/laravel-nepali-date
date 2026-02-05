@@ -15,8 +15,7 @@ class NepaliDateArrayData
         public readonly string $monthName,
         public readonly string $npDayName,
         public readonly string $npMonthName,
-    ) {
-    }
+    ) {}
 
     public static function from(array $data): self
     {

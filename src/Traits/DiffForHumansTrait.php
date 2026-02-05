@@ -2,7 +2,7 @@
 
 namespace Anuzpandey\LaravelNepaliDate\Traits;
 
-trait DiffForHumsTrait
+trait DiffForHumansTrait
 {
     public function nepaliDiffForHumans($diffInHuman): string
     {

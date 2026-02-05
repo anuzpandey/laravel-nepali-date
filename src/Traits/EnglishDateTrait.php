@@ -118,14 +118,14 @@ trait EnglishDateTrait
 
         for ($i = 0; $i < ($this->year - $this->nepaliYear); $i++) {
             for ($j = 1; $j <= 12; $j++) {
-                $totalNepaliDays += $this->calendarData[$k][$j];
+                $totalNepaliDays += $this->getCalendarData()[$k][$j];
             }
             $k++;
         }
 
         // Count Total Days in terms of month
         for ($j = 1; $j < $this->month; $j++) {
-            $totalNepaliDays += $this->calendarData[$k][$j];
+            $totalNepaliDays += $this->getCalendarData()[$k][$j];
         }
 
         // Count Total Days in Terms of days
