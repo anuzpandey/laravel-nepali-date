@@ -259,14 +259,13 @@ class LaravelNepaliDate
             return [$year, $month, $day, $input->format('Y-m-d')];
         }
 
-        if (is_int($input) || (is_string($input) && ctype_digit($input))) {
+        if (is_int($input)) {
             if ($calendar !== 'en') {
                 throw InvalidDateException::forDate('Timestamp inputs are only supported for English dates.', ['calendar' => $calendar]);
             }
 
-            $timestamp = (int) $input;
             $timezone = config('app.timezone', 'UTC');
-            $date = (new DateTimeImmutable('@'.$timestamp))->setTimezone(new DateTimeZone($timezone));
+            $date = (new DateTimeImmutable('@'.$input))->setTimezone(new DateTimeZone($timezone));
 
             $year = (int) $date->format('Y');
             $month = (int) $date->format('m');
@@ -291,7 +290,29 @@ class LaravelNepaliDate
             throw InvalidDateException::forDate('Unsupported input type for date parsing.', ['type' => get_debug_type($input)]);
         }
 
-        [$year, $month, $day] = self::parseDateComponents($input, $format);
+        try {
+            [$year, $month, $day] = self::parseDateComponents($input, $format);
+
+            return [$year, $month, $day, $input];
+        } catch (InvalidDateException $exception) {
+            if (! ctype_digit($input)) {
+                throw $exception;
+            }
+
+            if ($calendar !== 'en') {
+                throw InvalidDateException::forDate('Timestamp inputs are only supported for English dates.', ['calendar' => $calendar]);
+            }
+
+            $timestamp = (int) $input;
+            $timezone = config('app.timezone', 'UTC');
+            $date = (new DateTimeImmutable('@'.$timestamp))->setTimezone(new DateTimeZone($timezone));
+
+            $year = (int) $date->format('Y');
+            $month = (int) $date->format('m');
+            $day = (int) $date->format('d');
+
+            return [$year, $month, $day, $date->format('Y-m-d')];
+        }
 
         return [$year, $month, $day, $input];
     }

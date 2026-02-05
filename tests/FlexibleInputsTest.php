@@ -43,3 +43,15 @@ it('supports parse helper with options', function () {
 
     expect($result)->toBe(LaravelNepaliDate::from('1996-04-22')->toNepaliDate());
 });
+
+it('parses numeric date strings with a custom format', function () {
+    $result = LaravelNepaliDate::from('19960422', format: 'Ymd')->toNepaliDate();
+
+    expect($result)->toBe(LaravelNepaliDate::from('1996-04-22')->toNepaliDate());
+});
+
+it('parses numeric nepali date strings with a custom format', function () {
+    $result = LaravelNepaliDate::from('20800101', format: 'Ymd', calendar: 'np')->toEnglishDate();
+
+    expect($result)->toBe(LaravelNepaliDate::from('2080-01-01', calendar: 'np')->toEnglishDate());
+});
