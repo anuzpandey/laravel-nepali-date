@@ -299,6 +299,15 @@ class LaravelNepaliDate
                 throw $exception;
             }
 
+            if ($exception->getMessage() !== self::message('format')) {
+                throw $exception;
+            }
+
+            $length = strlen($input);
+            if ($length < 9) {
+                throw $exception;
+            }
+
             if ($calendar !== 'en') {
                 throw InvalidDateException::forDate('Timestamp inputs are only supported for English dates.', ['calendar' => $calendar]);
             }

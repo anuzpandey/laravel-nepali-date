@@ -55,3 +55,7 @@ it('parses numeric nepali date strings with a custom format', function () {
 
     expect($result)->toBe(LaravelNepaliDate::from('2080-01-01', calendar: 'np')->toEnglishDate());
 });
+
+it('does not treat short numeric strings as timestamps when format mismatches', function () {
+    LaravelNepaliDate::from('19960422')->toNepaliDate();
+})->throws(InvalidDateException::class, 'Input date does not match the provided format.');
