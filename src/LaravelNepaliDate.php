@@ -63,6 +63,9 @@ class LaravelNepaliDate
         $format = $options['format'] ?? 'Y-m-d';
         $calendar = $options['calendar'] ?? 'en';
         $strict = $options['strict'] ?? null;
+        if (! empty($options['timestamp'])) {
+            $format = 'timestamp';
+        }
 
         return self::from($input, $format, $calendar, $strict);
     }
@@ -247,6 +250,8 @@ class LaravelNepaliDate
 
     protected static function parseInput(mixed $input, string $format, string $calendar): array
     {
+        $isTimestampFormat = $format === 'timestamp';
+
         if ($input instanceof DateTimeInterface) {
             if ($calendar !== 'en') {
                 throw InvalidDateException::forDate('DateTimeInterface inputs are only supported for English dates.', ['calendar' => $calendar]);
@@ -288,6 +293,26 @@ class LaravelNepaliDate
 
         if (! is_string($input)) {
             throw InvalidDateException::forDate('Unsupported input type for date parsing.', ['type' => get_debug_type($input)]);
+        }
+
+        if ($isTimestampFormat) {
+            if (! ctype_digit($input)) {
+                throw InvalidDateException::forDate('Timestamp format requires a numeric string.', ['input' => $input]);
+            }
+
+            if ($calendar !== 'en') {
+                throw InvalidDateException::forDate('Timestamp inputs are only supported for English dates.', ['calendar' => $calendar]);
+            }
+
+            $timestamp = (int) $input;
+            $timezone = config('app.timezone', 'UTC');
+            $date = (new DateTimeImmutable('@'.$timestamp))->setTimezone(new DateTimeZone($timezone));
+
+            $year = (int) $date->format('Y');
+            $month = (int) $date->format('m');
+            $day = (int) $date->format('d');
+
+            return [$year, $month, $day, $date->format('Y-m-d')];
         }
 
         try {

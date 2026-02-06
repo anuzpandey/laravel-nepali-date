@@ -59,3 +59,21 @@ it('parses numeric nepali date strings with a custom format', function () {
 it('does not treat short numeric strings as timestamps when format mismatches', function () {
     LaravelNepaliDate::from('19960422')->toNepaliDate();
 })->throws(InvalidDateException::class, 'Input date does not match the provided format.');
+
+it('supports explicit timestamp parsing for numeric strings', function () {
+    config()->set('app.timezone', 'UTC');
+
+    $timestamp = (string) (new DateTimeImmutable('1972-12-31 00:00:00', new DateTimeZone('UTC')))->getTimestamp();
+    $result = LaravelNepaliDate::from($timestamp, format: 'timestamp')->toNepaliDate();
+
+    expect($result)->toBe(LaravelNepaliDate::from('1972-12-31')->toNepaliDate());
+});
+
+it('supports explicit timestamp parsing via parse options', function () {
+    config()->set('app.timezone', 'UTC');
+
+    $timestamp = (string) (new DateTimeImmutable('1972-12-31 00:00:00', new DateTimeZone('UTC')))->getTimestamp();
+    $result = LaravelNepaliDate::parse($timestamp, ['timestamp' => true])->toNepaliDate();
+
+    expect($result)->toBe(LaravelNepaliDate::from('1972-12-31')->toNepaliDate());
+});
