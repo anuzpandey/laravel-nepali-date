@@ -23,7 +23,6 @@ php artisan vendor:publish --tag="nepali-date-config"
 ## Usage
 
 ```php
-use Carbon\Carbon;
 use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
 
 $engDate = '1996-04-22';
