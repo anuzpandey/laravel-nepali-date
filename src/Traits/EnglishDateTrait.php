@@ -73,6 +73,22 @@ trait EnglishDateTrait
         );
     }
 
+    public function toEnglishDateTime(string $format = 'Y-m-d H:i:s', ?string $locale = null): string
+    {
+        $locale = $locale ?? config('nepali-date.default_locale');
+        $this->assertNepaliDate();
+
+        $totalNepaliDays = $this->calculateTotalNepaliDays();
+        $this->performCalculationBasedOnNepaliDays($totalNepaliDays);
+
+        return $this->formatDateString(
+            $format,
+            $locale,
+            $this->toEnglishDateArray(),
+            $this->getTimeFormatData(),
+        );
+    }
+
     public function toEnglishDateArray(): NepaliDateArrayData
     {
         return NepaliDateArrayData::from([

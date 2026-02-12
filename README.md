@@ -23,6 +23,9 @@ php artisan vendor:publish --tag="nepali-date-config"
 ## Usage
 
 ```php
+use Carbon\Carbon;
+use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
+
 $engDate = '1996-04-22';
 LaravelNepaliDate::from($engDate)->toNepaliDate();
 // Result: 2053-01-10
@@ -57,6 +60,102 @@ LaravelNepaliDate::daysInYear(2053);
 // Result: 365
 ```
 
+## Flexible Inputs
+
+`LaravelNepaliDate::from()` accepts multiple input types:
+
+- Date string (default format `Y-m-d`)
+- Date string with custom format
+- `DateTimeInterface` / Carbon (English calendar only)
+- Unix timestamp as `int`
+- Unix timestamp as numeric `string`
+- Array input with `year`, `month`, `day` (optional `hour`, `minute`, `second`)
+
+```php
+use Carbon\Carbon;
+use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
+
+LaravelNepaliDate::from('1996-04-22')->toNepaliDate();
+LaravelNepaliDate::from('22/04/1996', format: 'd/m/Y')->toNepaliDate();
+
+LaravelNepaliDate::from(Carbon::parse('1996-04-22'))->toNepaliDate();
+LaravelNepaliDate::from(829632000)->toNepaliDate();
+LaravelNepaliDate::from('829632000')->toNepaliDate(); // numeric string timestamp
+
+LaravelNepaliDate::from([
+    'year' => 1996,
+    'month' => 4,
+    'day' => 22,
+    'hour' => 12,
+    'minute' => 30,
+    'second' => 15,
+])->toNepaliDateTime();
+```
+
+You can also use `parse()` when passing options as an array:
+
+```php
+LaravelNepaliDate::parse('22/04/1996', [
+    'format' => 'd/m/Y',
+    'calendar' => 'en',
+    'strict' => true,
+])->toNepaliDate();
+```
+
+## Strict Validation
+
+Enable strict validation per-call:
+
+```php
+LaravelNepaliDate::from('2023-02-30', strict: true)->toNepaliDate();
+// throws InvalidDateException
+```
+
+Or validate directly:
+
+```php
+LaravelNepaliDate::validateEnglish('2024-02-29'); // true
+LaravelNepaliDate::validateEnglish('2023-02-29'); // false or throws
+
+LaravelNepaliDate::validateNepali('2081-02-32'); // true if valid in BS calendar data
+LaravelNepaliDate::validateNepali('2081-02-33'); // false or throws
+```
+
+You can set package-wide defaults in `config/nepali-date.php`:
+
+```php
+'validation' => [
+    'strict' => false,
+    'throw_on_invalid' => true,
+],
+```
+
+## Now, Today, and DateTime Conversion
+
+```php
+use Anuzpandey\LaravelNepaliDate\LaravelNepaliDate;
+
+// Current date helpers
+LaravelNepaliDate::today()->toNepaliDate();
+LaravelNepaliDate::today('np')->toEnglishDate();
+
+LaravelNepaliDate::now()->toNepaliDateTime();
+LaravelNepaliDate::now('np')->toEnglishDateTime();
+
+// Preserve time while converting calendars
+LaravelNepaliDate::from('1996-04-22 12:30:15', format: 'Y-m-d H:i:s')
+    ->toNepaliDateTime('Y-m-d H:i:s');
+// Result: 2053-01-10 12:30:15
+
+LaravelNepaliDate::from('2053-01-10 12:30:15', format: 'Y-m-d H:i:s', calendar: 'np')
+    ->toEnglishDateTime('Y-m-d H:i:s');
+// Result: 1996-04-22 12:30:15
+```
+
+Notes:
+- If input has no time component, time defaults to `00:00:00`.
+- Locale formatting applies to the date portion; time remains numeric.
+
 ## Format Specifiers
 
 The following format specifiers are supported for formatting dates:
@@ -72,6 +171,14 @@ The following format specifiers are supported for formatting dates:
 - `D` - Day in three letters (Sun-Sat/आइत-शनि)
 - `l` - Day in full name (Sunday-Saturday/आइतबार-शनिबार)
 - `S` - Day in two letters (st, nd, rd, th)
+- `H` - Hour in 24-hour format with leading zero (00-23)
+- `G` - Hour in 24-hour format without leading zero (0-23)
+- `h` - Hour in 12-hour format with leading zero (01-12)
+- `g` - Hour in 12-hour format without leading zero (1-12)
+- `i` - Minutes with leading zero (00-59)
+- `s` - Seconds with leading zero (00-59)
+- `a` - Lowercase meridiem (`am` or `pm`)
+- `A` - Uppercase meridiem (`AM` or `PM`)
 
 ## Extending Carbon with NepaliDateMixin
 > **Note:** This feature has been deprecated as Carbon doesn't support the months having more than 31 days. This feature has been removed from version 2.0.0.

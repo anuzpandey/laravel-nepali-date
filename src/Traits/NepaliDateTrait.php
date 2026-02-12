@@ -102,6 +102,19 @@ trait NepaliDateTrait
         return $this->toFormattedNepaliDate($format, $locale);
     }
 
+    public function toNepaliDateTime(string $format = 'Y-m-d H:i:s', ?string $locale = null): string
+    {
+        $locale = $locale ?? config('nepali-date.default_locale');
+        $this->performCalculationOnEnglishDate();
+
+        return $this->formatDateString(
+            $format,
+            $locale,
+            $this->toNepaliDateArrayData(),
+            $this->getTimeFormatData(),
+        );
+    }
+
     public function toFormattedNepaliDate(?string $format = null, ?string $locale = null): string
     {
         $format = $format ?? config('nepali-date.default_format');
