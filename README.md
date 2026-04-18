@@ -80,13 +80,92 @@ The following format specifiers are supported for formatting dates:
 
 ```php
 // Convert English date to Nepali date (B.S.).
-toNepaliDate("1996-04-22") 
+toNepaliDate("1996-04-22")
 // Result: 2053-01-10
 
 // Convert Nepali date to English date (A.D.).
-toEnglishDate("2053-01-10") 
+toEnglishDate("2053-01-10")
 // Result: 1996-04-22
 ```
+
+## Blade Directives
+
+You can use the Blade directives directly in your views:
+
+```blade
+{{-- Convert English date to Nepali date --}}
+@nepaliDate('1996-04-22')
+{{-- Result: 2053-01-10 --}}
+
+{{-- With format --}}
+@nepaliDate('1996-04-22', 'l, d F Y')
+{{-- Result: सोमबार, १० वैशाख २०५३ --}}
+
+{{-- With format and locale --}}
+@nepaliDate('1996-04-22', 'l, d F Y', 'en')
+{{-- Result: Monday, 10 Baisakh 2053 --}}
+
+{{-- Convert Nepali date to English date --}}
+@englishDate('2053-01-10')
+{{-- Result: 1996-04-22 --}}
+
+{{-- With format --}}
+@englishDate('2053-01-10', 'l, d F Y')
+{{-- Result: सोमबार, २२ अप्रिल १९९६ --}}
+
+{{-- With format and locale --}}
+@englishDate('2053-01-10', 'l, d F Y', 'en')
+{{-- Result: Monday, 22 April 1996 --}}
+```
+
+
+## Artisan Commands
+
+Run quick conversions from the CLI:
+
+```bash
+php artisan nepali-date:convert --from=1996-04-22 --to=np
+php artisan nepali-date:today
+php artisan nepali-date:range --from=2080-01-01 --until=2080-01-05 --calendar=np --to=en
+```
+
+Common options:
+- `--format=` Output format (defaults to `config('nepali-date.default_format')`)
+- `--locale=` Output locale `en` or `np`
+- `--strict` Enable stricter date validation
+- `--json` Emit JSON output
+- `--timezone=` Timezone for `today`
+
+## Getting Date as Array
+
+You can get the date components as an array for more flexibility:
+
+```php
+$engDate = '1996-04-22';
+$dateArray = LaravelNepaliDate::from($engDate)->toNepaliDateArray();
+// Returns NepaliDateArrayData object with:
+// - year: '2053'
+// - month: '01'
+// - day: '10'
+// - npYear: '२०५३'
+// - npMonth: '०१'
+// - npDay: '१०'
+// - dayName: 'Monday'
+// - monthName: 'Baisakh'
+// - npDayName: 'सोमबार'
+// - npMonthName: 'वैशाख'
+
+$nepDate = '2053-01-10';
+$dateArray = LaravelNepaliDate::from($nepDate)->toEnglishDateArray();
+// Returns similar structure with English date data
+```
+
+## Supported Date Ranges
+
+| Calendar | From | To |
+|----------|------|-----|
+| English (A.D.) | 1944-01-01 | 2033-12-31 |
+| Nepali (B.S.) | 2000-09-17 | 2099-12-30 |
 
 ## Testing
 

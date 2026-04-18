@@ -3,7 +3,6 @@
 namespace Anuzpandey\LaravelNepaliDate\Traits;
 
 use Anuzpandey\LaravelNepaliDate\DataTransferObject\NepaliDateArrayData;
-use RuntimeException;
 
 trait EnglishDateTrait
 {
@@ -62,11 +61,7 @@ trait EnglishDateTrait
 
     public function toEnglishDate(?string $format = null, ?string $locale = null): string
     {
-        $checkIfIsInRange = $this->isInNepaliDateRange($this->year, $this->month, $this->day);
-
-        if (! $checkIfIsInRange) {
-            throw new RuntimeException($checkIfIsInRange);
-        }
+        $this->assertNepaliDate();
 
         $totalNepaliDays = $this->calculateTotalNepaliDays();
 
@@ -96,8 +91,8 @@ trait EnglishDateTrait
 
     public function isInNepaliDateRange(int $year, int $month, int $day): string|bool
     {
-        if ($year < 2000 || $year > 2089) {
-            return 'Date is out of range. Please provide date between 2000 to 2089';
+        if ($year < 2000 || $year > 2099) {
+            return 'Date is out of range. Please provide date between 2000 to 2099';
         }
 
         if ($month < 1 || $month > 12) {
@@ -118,14 +113,14 @@ trait EnglishDateTrait
 
         for ($i = 0; $i < ($this->year - $this->nepaliYear); $i++) {
             for ($j = 1; $j <= 12; $j++) {
-                $totalNepaliDays += $this->calendarData[$k][$j];
+                $totalNepaliDays += $this->getCalendarData()[$k][$j];
             }
             $k++;
         }
 
         // Count Total Days in terms of month
         for ($j = 1; $j < $this->month; $j++) {
-            $totalNepaliDays += $this->calendarData[$k][$j];
+            $totalNepaliDays += $this->getCalendarData()[$k][$j];
         }
 
         // Count Total Days in Terms of days

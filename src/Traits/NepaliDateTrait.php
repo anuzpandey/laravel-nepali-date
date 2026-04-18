@@ -149,6 +149,7 @@ trait NepaliDateTrait
                 'Thursday' => 'Thu',
                 'Friday' => 'Fri',
                 'Saturday' => 'Sat',
+                default => $npDayName,
             };
         }
 
@@ -160,16 +161,13 @@ trait NepaliDateTrait
             'बिहिबार' => 'बिहि',
             'शुक्रबार' => 'शुक्र',
             'शनिबार' => 'शनि',
+            default => $npDayName,
         };
     }
 
     public function performCalculationOnEnglishDate(): void
     {
-        $checkIfIsInRange = $this->isInEnglishDateRange($this->year, $this->month, $this->day);
-
-        if (! $checkIfIsInRange) {
-            throw new RuntimeException($checkIfIsInRange);
-        }
+        $this->assertEnglishDate();
 
         $totalEnglishDays = $this->calculateTotalEnglishDays($this->year, $this->month, $this->day);
 
@@ -211,7 +209,7 @@ trait NepaliDateTrait
         $j = $this->nepaliMonth;
 
         while ($totalEnglishDays != 0) {
-            $lastDayOfMonth = $this->calendarData[$i][$j];
+            $lastDayOfMonth = $this->getCalendarData()[$i][$j];
 
             $this->nepaliDay++;
             $this->dayOfWeek++;
