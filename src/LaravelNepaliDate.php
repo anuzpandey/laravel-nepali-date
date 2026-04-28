@@ -29,6 +29,12 @@ class LaravelNepaliDate
 
     private ?string $inputDate = null;
 
+    private int $hour = 0;
+
+    private int $minute = 0;
+
+    private int $second = 0;
+
     public function __construct(
         public int|string $year,
         public int|string $month,
@@ -49,11 +55,12 @@ class LaravelNepaliDate
         $calendar = self::normalizeCalendar($calendar);
         $strict = $strict ?? (bool) config('nepali-date.validation.strict', false);
 
-        [$year, $month, $day, $inputDate] = self::parseInput($input, $format, $calendar);
+        [$year, $month, $day, $hour, $minute, $second, $inputDate] = self::parseInput($input, $format, $calendar);
 
         $instance = new self($year, $month, $day, $strict);
         $instance->inputFormat = $format;
         $instance->inputDate = $inputDate;
+        $instance->setTime($hour, $minute, $second);
 
         return $instance;
     }
@@ -68,6 +75,37 @@ class LaravelNepaliDate
         }
 
         return self::from($input, $format, $calendar, $strict);
+    }
+
+    public static function today(string $calendar = 'en'): self
+    {
+        $calendar = self::normalizeCalendar($calendar);
+        $timezone = new DateTimeZone(config('app.timezone', 'UTC'));
+        $now = new DateTimeImmutable('now', $timezone);
+
+        if ($calendar === 'en') {
+            return self::from($now->format('Y-m-d 00:00:00'), 'Y-m-d H:i:s', 'en');
+        }
+
+        $nepaliDate = self::from($now->format('Y-m-d'))->toNepaliDate('Y-m-d', 'en');
+
+        return self::from($nepaliDate.' 00:00:00', 'Y-m-d H:i:s', 'np');
+    }
+
+    public static function now(string $calendar = 'en'): self
+    {
+        $calendar = self::normalizeCalendar($calendar);
+        $timezone = new DateTimeZone(config('app.timezone', 'UTC'));
+        $now = new DateTimeImmutable('now', $timezone);
+
+        if ($calendar === 'en') {
+            return self::from($now->format('Y-m-d H:i:s'), 'Y-m-d H:i:s', 'en');
+        }
+
+        $nepaliDate = self::from($now->format('Y-m-d'))->toNepaliDate('Y-m-d', 'en');
+        $time = $now->format('H:i:s');
+
+        return self::from($nepaliDate.' '.$time, 'Y-m-d H:i:s', 'np');
     }
 
     public static function validateEnglish(string|DateTimeInterface $date, string $format = 'Y-m-d'): bool
@@ -261,7 +299,11 @@ class LaravelNepaliDate
             $month = (int) $input->format('m');
             $day = (int) $input->format('d');
 
-            return [$year, $month, $day, $input->format('Y-m-d')];
+            $hour = (int) $input->format('H');
+            $minute = (int) $input->format('i');
+            $second = (int) $input->format('s');
+
+            return [$year, $month, $day, $hour, $minute, $second, $input->format('Y-m-d H:i:s')];
         }
 
         if (is_int($input)) {
@@ -276,7 +318,11 @@ class LaravelNepaliDate
             $month = (int) $date->format('m');
             $day = (int) $date->format('d');
 
-            return [$year, $month, $day, $date->format('Y-m-d')];
+            $hour = (int) $date->format('H');
+            $minute = (int) $date->format('i');
+            $second = (int) $date->format('s');
+
+            return [$year, $month, $day, $hour, $minute, $second, $date->format('Y-m-d H:i:s')];
         }
 
         if (is_array($input)) {
@@ -287,8 +333,12 @@ class LaravelNepaliDate
             $year = (int) $input['year'];
             $month = (int) $input['month'];
             $day = (int) $input['day'];
+            $hour = (int) ($input['hour'] ?? 0);
+            $minute = (int) ($input['minute'] ?? 0);
+            $second = (int) ($input['second'] ?? 0);
+            self::assertTimeComponents($hour, $minute, $second);
 
-            return [$year, $month, $day, sprintf('%04d-%02d-%02d', $year, $month, $day)];
+            return [$year, $month, $day, $hour, $minute, $second, sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year, $month, $day, $hour, $minute, $second)];
         }
 
         if (! is_string($input)) {
@@ -312,13 +362,17 @@ class LaravelNepaliDate
             $month = (int) $date->format('m');
             $day = (int) $date->format('d');
 
-            return [$year, $month, $day, $date->format('Y-m-d')];
+            $hour = (int) $date->format('H');
+            $minute = (int) $date->format('i');
+            $second = (int) $date->format('s');
+
+            return [$year, $month, $day, $hour, $minute, $second, $date->format('Y-m-d H:i:s')];
         }
 
         try {
-            [$year, $month, $day] = self::parseDateComponents($input, $format);
+            [$year, $month, $day, $hour, $minute, $second] = self::parseDateTimeComponents($input, $format);
 
-            return [$year, $month, $day, $input];
+            return [$year, $month, $day, $hour, $minute, $second, $input];
         } catch (InvalidDateException $exception) {
             if (! ctype_digit($input)) {
                 throw $exception;
@@ -345,13 +399,22 @@ class LaravelNepaliDate
             $month = (int) $date->format('m');
             $day = (int) $date->format('d');
 
-            return [$year, $month, $day, $date->format('Y-m-d')];
-        }
+            $hour = (int) $date->format('H');
+            $minute = (int) $date->format('i');
+            $second = (int) $date->format('s');
 
-        return [$year, $month, $day, $input];
+            return [$year, $month, $day, $hour, $minute, $second, $date->format('Y-m-d H:i:s')];
+        }
     }
 
     protected static function parseDateComponents(string $date, string $format): array
+    {
+        [$year, $month, $day] = self::parseDateTimeComponents($date, $format);
+
+        return [$year, $month, $day];
+    }
+
+    protected static function parseDateTimeComponents(string $date, string $format): array
     {
         $tokens = [
             'Y' => ['year', 4, 4],
@@ -359,6 +422,9 @@ class LaravelNepaliDate
             'n' => ['month', 1, 2],
             'd' => ['day', 2, 2],
             'j' => ['day', 1, 2],
+            'H' => ['hour', 2, 2],
+            'i' => ['minute', 2, 2],
+            's' => ['second', 2, 2],
         ];
 
         $pattern = '';
@@ -413,10 +479,55 @@ class LaravelNepaliDate
             throw InvalidDateException::forDate('Input format must include Y, m, and d tokens.', ['format' => $format]);
         }
 
+        $hour = isset($matches['hour']) ? (int) $matches['hour'] : 0;
+        $minute = isset($matches['minute']) ? (int) $matches['minute'] : 0;
+        $second = isset($matches['second']) ? (int) $matches['second'] : 0;
+        self::assertTimeComponents($hour, $minute, $second);
+
         return [
             (int) $matches['year'],
             (int) $matches['month'],
             (int) $matches['day'],
+            $hour,
+            $minute,
+            $second,
+        ];
+    }
+
+    protected static function assertTimeComponents(int $hour, int $minute, int $second): void
+    {
+        if ($hour < 0 || $hour > 23 || $minute < 0 || $minute > 59 || $second < 0 || $second > 59) {
+            throw InvalidDateException::forDate('Time is out of range. Please provide valid time between 00:00:00 and 23:59:59.', [
+                'hour' => $hour,
+                'minute' => $minute,
+                'second' => $second,
+            ]);
+        }
+    }
+
+    protected function setTime(int $hour, int $minute, int $second): void
+    {
+        self::assertTimeComponents($hour, $minute, $second);
+
+        $this->hour = $hour;
+        $this->minute = $minute;
+        $this->second = $second;
+    }
+
+    protected function getTimeFormatData(): array
+    {
+        $hour12 = $this->hour % 12;
+        $hour12 = $hour12 === 0 ? 12 : $hour12;
+
+        return [
+            'H' => sprintf('%02d', $this->hour),
+            'G' => (string) $this->hour,
+            'h' => sprintf('%02d', $hour12),
+            'g' => (string) $hour12,
+            'i' => sprintf('%02d', $this->minute),
+            's' => sprintf('%02d', $this->second),
+            'a' => $this->hour < 12 ? 'am' : 'pm',
+            'A' => $this->hour < 12 ? 'AM' : 'PM',
         ];
     }
 }

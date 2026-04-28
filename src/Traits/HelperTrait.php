@@ -153,7 +153,7 @@ trait HelperTrait
         ];
     }
 
-    private function formatDateString(string $format, string $locale, $dateArray): string
+    private function formatDateString(string $format, string $locale, $dateArray, array $extraFormatData = []): string
     {
         $formattedArray = ($locale === 'en')
             ? $this->getEnglishLocaleFormattingCharacters($dateArray)
@@ -171,6 +171,7 @@ trait HelperTrait
             'D' => $formattedArray['D'],
             'S' => $formattedArray['j'],
         ];
+        $formatData = array_merge($formatData, $extraFormatData);
 
         return $this->getFormattedString($format, $formatData, $locale);
     }
